@@ -1,4 +1,6 @@
 using Microsoft.Extensions.Configuration;
+using NLog;
+using NLog.Web;
 using WEB01.ACCOUNTING2023.API.Extensions.Installer;
 using WEB01.ACCOUNTING2023.CORE.Configurations;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures;
@@ -6,7 +8,10 @@ using WEB01.ACCOUNTING2023.CORE.Interfaces.Services;
 using WEB01.ACCOUNTING2023.CORE.Services;
 using WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository;
 
-
+var logger = NLog.LogManager.Setup().LoadConfigurationFromAppSettings().GetCurrentClassLogger();
+  try
+{
+    
     var builder = WebApplication.CreateBuilder(args);
 
     // Add services to the container.
@@ -22,6 +27,9 @@ using WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository;
                     policy.WithOrigins("http://localhost:8080").AllowAnyMethod().AllowAnyOrigin().AllowAnyHeader();
                 });
     });
+
+    builder.Logging.ClearProviders();
+    builder.Host.UseNLog();
 
     var app = builder.Build();
 
@@ -41,5 +49,12 @@ using WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository;
     app.MapControllers();
 
     app.Run();
+}catch(Exception ex)
+{
+    logger.Error(ex);
+}finally
+{
+    NLog.LogManager.Shutdown();
+}
 
 

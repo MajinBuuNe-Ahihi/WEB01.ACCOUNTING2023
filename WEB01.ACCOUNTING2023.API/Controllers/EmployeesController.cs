@@ -14,13 +14,18 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #region Field
         IEmployeeServices _employeeServices;
         IEmployeeRepository _employeeRepository;
+        ILogger<EmployeesController> _logger;
         #endregion
 
         #region Constructor
-        public EmployeesController(IIfrastructureBase<Employees> ifrastructureBase,IEmployeeRepository employeeRepository,IEmployeeServices employeeServices) : base(ifrastructureBase)
+        public EmployeesController(IIfrastructureBase<Employees> ifrastructureBase,
+            IEmployeeRepository employeeRepository,
+            IEmployeeServices employeeServices,
+            ILogger<EmployeesController> logger) : base(ifrastructureBase, logger)
         {
             _employeeServices = employeeServices;
             _employeeRepository = employeeRepository;
+            _logger = logger;
         }
         #endregion
 
@@ -43,6 +48,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -69,6 +75,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -96,6 +103,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -125,6 +133,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -152,6 +161,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -175,10 +185,10 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             {
             var stream = _employeeServices.ExportFile(ids);
             return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Employee.xlsx");
-
             }
              catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -205,6 +215,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -234,6 +245,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -245,6 +257,5 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
         }
         #endregion
-
     }
 }

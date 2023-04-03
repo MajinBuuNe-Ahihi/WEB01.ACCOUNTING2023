@@ -11,12 +11,16 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
     {
         #region Field
         IDepartmentRepository _departmentRepository;
+        ILogger<DepartmentsController> _logger;
         #endregion
 
         #region Constructor
-        public DepartmentsController(IIfrastructureBase<Departments> ifrastructureBase,IDepartmentRepository departmentRepository) : base(ifrastructureBase)
+        public DepartmentsController(IIfrastructureBase<Departments> ifrastructureBase,
+            IDepartmentRepository departmentRepository,
+            ILogger<DepartmentsController> logger) : base(ifrastructureBase,logger)
         {
             _departmentRepository = departmentRepository;
+            _logger = logger;
         }
         #endregion
 
@@ -32,6 +36,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -59,6 +64,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,

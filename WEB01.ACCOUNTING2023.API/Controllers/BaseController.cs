@@ -12,12 +12,14 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
     {
         #region Field
         IIfrastructureBase<T> _ifrastructureBase;
+        ILogger<BaseController<T>> _logger;
         #endregion
 
         #region Constructor
-        public BaseController(IIfrastructureBase<T> ifrastructureBase)
+        public BaseController(IIfrastructureBase<T> ifrastructureBase,ILogger<BaseController<T>> logger)
         {
             _ifrastructureBase = ifrastructureBase;
+            _logger = logger;
         }
         #endregion
 
@@ -36,6 +38,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
                 return StatusCode(value.StatusCode, value);
             }catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " "+ ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
@@ -62,6 +65,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             }
             catch (Exception ex)
             {
+                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
                 {
                     Data = null,
