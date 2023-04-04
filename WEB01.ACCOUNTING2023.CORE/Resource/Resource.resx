@@ -127,8 +127,14 @@
   <data name="Fail" xml:space="preserve">
     <value>Thực hiện không thành công!</value>
   </data>
+  <data name="Female" xml:space="preserve">
+    <value>Nữ</value>
+  </data>
   <data name="InvalidData" xml:space="preserve">
     <value>Dữ liệu không đúng định dạng</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>Nam</value>
   </data>
   <data name="NotFound" xml:space="preserve">
     <value>Bản ghi không tồn tại!</value>
@@ -136,6 +142,9 @@
   <data name="OnlyInvalid" xml:space="preserve">
     <value>Đã tồn tại</value>
     <comment>thông báo kiểu tra property đã trùng</comment>
+  </data>
+  <data name="Other" xml:space="preserve">
+    <value>Khác</value>
   </data>
   <data name="OverDate" xml:space="preserve">
     <value>không được vượt quá ngày hiện tại</value>

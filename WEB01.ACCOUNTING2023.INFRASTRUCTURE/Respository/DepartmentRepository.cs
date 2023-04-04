@@ -34,34 +34,6 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 
         #region Method
 
-        public ResponseResult  GetAllData()
-        {
-            this._dbConnection.Open();
-            string proc = "Proc_Departments_GetAll";
-            var result = this._dbConnection.GetConnection().Query<DepartmentsDTO>(sql: proc, commandType: CommandType.StoredProcedure);
-            this._dbConnection.Close();
-            if (result != null)
-            {
-                return new ResponseResult()
-                {
-                    Data = result,
-                    ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
-                    Message = Resource.Success.ToString(),
-                    StatusCode = 200
-                };
-            }
-            else
-            {
-                return new ResponseResult()
-                {
-                    Data = null,
-                    ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
-                    Message = Resource.NotFound.ToString(),
-                    StatusCode = 404
-                };
-            }
-        }
-
         public  ResponseResult GetDataByFilterValue(string value)
         {
             this._dbConnection.Open();

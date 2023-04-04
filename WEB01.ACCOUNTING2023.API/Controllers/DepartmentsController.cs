@@ -31,7 +31,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         {
             try
             {
-                var value = _departmentRepository.GetAllData();
+                var value = _departmentRepository.GetAllData<Departments>();
                 return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)

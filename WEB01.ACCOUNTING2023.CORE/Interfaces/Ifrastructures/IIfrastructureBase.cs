@@ -24,5 +24,12 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
         /// <param name="id">mã của T</param>
         /// <returns></returns>
         public  ResponseResult GetDataByID(Guid id);
+
+        /// <summary>
+        ///  lấy tất cả bản ghi
+        ///  createby: HVManh (4/4/2023)
+        /// </summary>
+        /// <returns></returns>
+        public ResponseResult GetAllData<G>();
     }
 }

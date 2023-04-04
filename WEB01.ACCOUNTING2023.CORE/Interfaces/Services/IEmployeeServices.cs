@@ -30,7 +30,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Services
         /// </summary>
         /// <param name="ids">danh sách mã nhân viên</param>
         /// <returns></returns>
-        public MemoryStream ExportFile(string ids);
+        public MemoryStream ExportFile(string ids,string type);
 
         /// <summary>
         ///  nhập excek từ file

@@ -17,12 +17,5 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
         /// <param name="value">giá trị cần tìm kiếm</param>
         /// <returns></returns>
         public ResponseResult GetDataByFilterValue(string value);
-
-        /// <summary>
-        ///  lấy tất cả danh sách phòng ban
-        ///  create by: HV Mạnh (16/3/2023)
-        /// </summary>
-        /// <returns></returns>
-        public ResponseResult GetAllData();
     }
 }

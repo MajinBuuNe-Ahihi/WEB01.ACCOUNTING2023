@@ -15,6 +15,7 @@ using WEB01.ACCOUNTING2023.CORE.Entities.Models;
 using WEB01.ACCOUNTING2023.CORE.Enum;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Services;
+using static OfficeOpenXml.ExcelErrorValue;
 
 namespace WEB01.ACCOUNTING2023.CORE.Services
 {
@@ -22,11 +23,13 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
     {
         #region Field
         IEmployeeRepository _employeeRepository;
+        IDepartmentRepository _departmentRepository;
         #endregion
         #region Constructor
-        public ExcelServices(IEmployeeRepository employeeRepository)
+        public ExcelServices(IEmployeeRepository employeeRepository, IDepartmentRepository departmentRepository)
         {
             _employeeRepository = employeeRepository;
+            _departmentRepository = departmentRepository;
         }
         #endregion
         public MemoryStream ExportFile(List<T> data)
@@ -38,28 +41,25 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                 List<PropertyInfo> properties = typeof(G).GetProperties().ToList<PropertyInfo>();
                 // lưu tên các attribute
                 List<string> nameProperties = new List<string>();
-                // tên address các cột
-                List<string> nameAddress = new List<string>();
                 // tạo header
                 var workSheet = package.Workbook.Worksheets.Add("Employee");
-                int asciiCode = 65;
-                int level = 1; // cấp côt của excel ví a-z 1 cấp  aa-zz -> 1 cấp
-                int indexColumn = 1;
+                workSheet.Cells[1, 1].Value = "DANH SÁCH NHÂN VIÊN";
+                int colHeader = 2;
+                workSheet.Cells[3, 1].LoadFromText("STT");
+                workSheet.Cells[3, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                workSheet.Cells[3, 1].Style.Fill.BackgroundColor.SetColor(Color.SlateGray);
+                workSheet.Cells[3, 1].Style.Font.Bold = true;
+                workSheet.Columns[1].Width = 5;
+                workSheet.Columns[1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 properties.ForEach((PropertyInfo prop) =>
                 {
-                    nameProperties.Add(prop.Name);
-                    string nameHeader = "";
-                    for (int i = 0; i < level; i++)
-                    {
-                        nameAddress.Add(nameHeader + Char.ToString((char)asciiCode));
-                        nameHeader = nameHeader + Char.ToString((char)asciiCode) + "1";
-                    }
-                    asciiCode = asciiCode % 90 == 0 ? 65 : asciiCode + 1;
-                    if (nameHeader != null && prop != null)
+
+                    if ( prop != null)
                     {
                         var attribute = prop.GetCustomAttributes(true);
                         if (attribute != null)
                         {
+                            nameProperties.Add(prop.Name);
                             foreach (var item in attribute)
                             {
                                 if (item != null && item.GetType() == typeof(DescriptionExcelAttribute))
@@ -67,25 +67,29 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                     DescriptionExcelAttribute obj = (DescriptionExcelAttribute)item;
                                     if (obj.Info != null)
                                     {
-                                        workSheet.Cells[nameHeader].LoadFromText(obj.Info);
-                                        workSheet.Cells[nameHeader].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                        workSheet.Cells[nameHeader].Style.Fill.BackgroundColor.SetColor(Color.SlateGray);
-                                        workSheet.Cells[nameHeader].Style.Font.Bold = true;
-                                        workSheet.Cells[nameHeader].AddComment((prop.Name).ToString());
-                                        workSheet.Columns[indexColumn].Width = obj.Width > 0 ? obj.Width : 20;
+                                        workSheet.Cells[3,colHeader].LoadFromText(obj.Info);
+                                        workSheet.Cells[3, colHeader].Style.Fill.PatternType = ExcelFillStyle.Solid;
+                                        workSheet.Cells[3, colHeader].Style.Fill.BackgroundColor.SetColor(Color.SlateGray);
+                                        workSheet.Cells[3, colHeader].Style.Font.Bold = true;
+                                        workSheet.Columns[colHeader].Width = obj.Width > 0 ? obj.Width : 20;
+                                        workSheet.Columns[colHeader].Style.WrapText = true;
+                                        workSheet.Columns[colHeader].Style.Numberformat.Format = prop.Name;
                                         if (obj.ColumnHorizontal == ExcelHorizontal.LEFT)
                                         {
-                                            workSheet.Columns[indexColumn].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                                            workSheet.Columns[colHeader].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
+                                            workSheet.Columns[colHeader].Style.Indent = 5;
                                         }
                                         else
                                         {
                                             if (obj.ColumnHorizontal == ExcelHorizontal.RIGHT)
                                             {
-                                                workSheet.Columns[indexColumn].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                                                workSheet.Columns[colHeader].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
+                                                workSheet.Columns[colHeader].Style.Indent = 5;
+
                                             }
                                             else
                                             {
-                                                workSheet.Columns[indexColumn].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                                                workSheet.Columns[colHeader].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                                             }
                                         }
                                     }
@@ -95,13 +99,20 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         }
 
                     }
-                    indexColumn++;
+                    colHeader++;
                 });
+                workSheet.Cells[1, 1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+                workSheet.Cells[1, 1].Style.VerticalAlignment= OfficeOpenXml.Style.ExcelVerticalAlignment.Center;
+                workSheet.Cells[1, 1].Style.Font.Bold = true;
+                workSheet.Cells[1, 1].Style.Font.Size = 16;
+                workSheet.Cells[1,1,1,colHeader-1].Merge = true;
+                workSheet.Cells[2, 1, 2, colHeader-1].Merge = true;
                 // thêm dữ liệu
-                int indexRow = 2;
+                int indexRow = 4;
                 data.ForEach((T item) =>
                 {
-                    int index = 0;
+                    workSheet.Cells[indexRow, 1].Value = indexRow - 3;
+                    int index = 2;
                     nameProperties.ForEach((name) =>
                     {
                         T obj = (T)item;
@@ -109,17 +120,29 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         var type = obj.GetType().GetProperty(name).PropertyType;
                         if (type == typeof(DateTime) || type == typeof(Nullable<DateTime>))
                         {
-                            workSheet.Cells[nameAddress[index] + indexRow.ToString()].Style.Numberformat.Format = "dd/MM/yyyy";
-                            workSheet.Cells[nameAddress[index] + indexRow.ToString()].Value = value /*!= null ? ((DateTime)value).ToString("dd/MM/yyyy") : ""*/;
+                            workSheet.Cells[indexRow,index].Style.Numberformat.Format = "dd/MM/yyyy";
+                            workSheet.Cells[indexRow, index].Value = value /*!= null ? ((DateTime)value).ToString("dd/MM/yyyy") : ""*/;
                         }
                         if (type == typeof(Gender) || type == typeof(Nullable<Gender>))
                         {
-                            workSheet.Cells[nameAddress[index] + indexRow.ToString()].Value = ((Gender)value == Gender.FEMALE?"Nữ":(Gender)value == Gender.MALE?"Nam":"Khác");
+                            workSheet.Cells[indexRow, index].Value = ((Gender)value == Gender.FEMALE?Resource.Resource.Female:(Gender)value == Gender.MALE? Resource.Resource.Male: Resource.Resource.Other);
                         }
                         else
-                        {
-                            workSheet.Cells[nameAddress[index] + indexRow.ToString()].Value = value;
+                        {  if(name == "DepartmentId")
+                            {
+                                var result =  _departmentRepository.GetDataByID(new Guid(value.ToString()));
+                                if (result.Data != null && ((Departments)result.Data).DepartmentName != null)
+                                {
+                                    workSheet.Cells[indexRow, index].Value = ((Departments) result.Data).DepartmentName;
+                                    workSheet.Cells[indexRow, index].Style.Numberformat.Format = value.ToString();
+                                }
+                            }
+                            else
+                            {
+                                workSheet.Cells[indexRow, index].Value = value;
+                            }
                         }
+                        workSheet.Cells[indexRow, index].Style.VerticalAlignment = ExcelVerticalAlignment.Center;
 
                         index++;
                     });
@@ -156,13 +179,13 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         var workBook = package.Workbook.Worksheets[0];
                         var row = workBook.Dimension.Rows;
                         var col = workBook.Dimension.Columns;
-                        for (int i = 1; i <= col; i++)
+                        for (int i = 2; i <= col; i++)
                         {
-                            var value = workBook.Cells[1, i].Comment.Text;
+                            var value = workBook.Columns[i].Style.Numberformat.Format;
                             listName.Add(value);
                         }
 
-                        for (int i = 2; i <= row; i++)
+                        for (int i = 4; i <= row; i++)
                         {
                             var employee = new Employees();
                             string codeEmployee = "";
@@ -170,44 +193,52 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                             string text = "";
                             try
                             {
-                            for (int j = 1; j <= col; j++)
-                            {
-                                PropertyInfo proInfo = employee.GetType().GetProperty(listName[j - 1]);
-                                var value = workBook.Cells[i, j].Value;
-                                if (listName[j - 1] == "EmployeeCode")
+                                for (int j = 2; j <= col; j++)
                                 {
-                                       codeEmployee = value.ToString();
-                                       var check = _employeeRepository.GetDataByCode(codeEmployee);
-                                        if (check.Data != null) {
-                                            error = listName[j - 1];
-                                            text = Resource.Resource.DuplicateCode;
-                                            throw new Exception();
-                                        }
-                                }
-                                    error = listName[j - 1];
-                                switch (proInfo.PropertyType.Name)
-                                {
-                                    case "Guid":  value = new Guid(value.ToString()); break;
-                                    case "Nullable`1":
-                                    case "DateTime":
-                                        {
-
-                                            if (value != null && value.ToString().Length > 0)
-                                            {
-                                                value =DateTime.FromOADate((double)value); break;
-                                               }
-                                            else
-                                            {
-                                                value = null;
+                                    PropertyInfo proInfo = employee.GetType().GetProperty(listName[j - 2]);
+                                    var value = workBook.Cells[i, j].Value;
+                                    if (listName[j - 2] == "EmployeeCode")
+                                    {
+                                           codeEmployee = value.ToString();
+                                           var check = _employeeRepository.GetDataByCode(codeEmployee);
+                                            if (check.Data != null) {
+                                                error = listName[j - 2];
+                                                text = Resource.Resource.DuplicateCode;
+                                                throw new Exception();
                                             }
-                                            break;
-                                        }
-                                    case "Gender": value = (value == "Nữ" ? Gender.FEMALE : value == "Nam" ? Gender.MALE : Gender.OTHER); break;
-                                    default: break;
                                     }
-                                    proInfo.SetValue(employee, value, null);
-                                }
-                                var result =  _employeeRepository.InsertData((Employees)employee);
+                                        error = listName[j - 2];
+                                    switch (proInfo.PropertyType.Name)
+                                    {
+                                        case "Guid": {
+                                                if (listName[j-2] == "DepartmentId")
+                                                {
+                                                    value = new Guid(workBook.Cells[i, j].Style.Numberformat.Format.ToString());
+                                                }
+                                                else
+                                                {
+                                                    value = new Guid(value.ToString());
+                                                }
+                                            }; break;
+                                        case "Nullable`1":
+                                        case "DateTime":
+                                            {
+                                                if (value != null && value.ToString().Length > 0)
+                                                {
+                                                    value =DateTime.FromOADate((double)value); break;
+                                                 }
+                                                else
+                                                {
+                                                    value = null;
+                                                }
+                                                break;
+                                            }
+                                        case "Gender": value = (value == Resource.Resource.Female? Gender.FEMALE : value == Resource.Resource.Male ? Gender.MALE : Gender.OTHER); break;
+                                        default: break;
+                                        }
+                                        proInfo.SetValue(employee, value, null);
+                                    }
+                                    var result =  _employeeRepository.InsertData((Employees)employee);
                             }catch(Exception ex)
                             {
                                 ListErrors.Add(codeEmployee + "--"+ DateTime.Now.Ticks, error + " " + text);

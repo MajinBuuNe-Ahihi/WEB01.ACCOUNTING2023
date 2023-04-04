@@ -94,11 +94,21 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             return new ResponseResult() { Data = null, ErrorCode = CORE.Enum.ErrorCode.INVALID, Message = Resource.Resource.InvalidData.ToString(), StatusCode = 400, MoreInfo = ListErrors };
         }
 
-        public MemoryStream ExportFile(string ids)
+        public MemoryStream ExportFile(string ids, string type = "byids")
         {
-            var result = _employeeRepository.GetEmployeeByIDs(ids);
-            var value =_importExportServices.ExportFile(result.Data);
-            return value;
+            if(type == "byids")
+            {
+                var result = _employeeRepository.GetEmployeeByIDs(ids);
+                var value =_importExportServices.ExportFile(result.Data);
+                return value;
+            }
+            else
+            {
+                var result = _employeeRepository.GetAllData<EmployeesDTO>();
+                var value = _importExportServices.ExportFile(result.Data);
+                return value;
+            }
+
         }
 
         public ResponseResult Update(Employees entity, Guid? id)

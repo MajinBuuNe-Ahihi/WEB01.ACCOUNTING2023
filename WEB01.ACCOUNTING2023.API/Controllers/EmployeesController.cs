@@ -178,13 +178,13 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         /// </summary>
         /// <param name="ids">chuối danh sách mã nhân viên</param>
         /// <returns></returns>
-        [HttpPost("export-excel")]
-        public IActionResult ExportExcel([FromBody] string ids)
+        [HttpPost("export-excel/{type:regex(^(getall|byids)$)}")]
+        public IActionResult ExportExcel([FromBody] string ids, [FromRoute] string type)
         {
             try
             {
-            var stream = _employeeServices.ExportFile(ids);
-            return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Employee.xlsx");
+                var stream = _employeeServices.ExportFile(ids,type);
+                return File(stream.ToArray(), "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Employee.xlsx");
             }
              catch (Exception ex)
             {

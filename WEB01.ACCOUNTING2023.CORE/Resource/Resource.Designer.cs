@@ -88,11 +88,29 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Nữ.
+        /// </summary>
+        public static string Female {
+            get {
+                return ResourceManager.GetString("Female", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Dữ liệu không đúng định dạng.
         /// </summary>
         public static string InvalidData {
             get {
                 return ResourceManager.GetString("InvalidData", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Nam.
+        /// </summary>
+        public static string Male {
+            get {
+                return ResourceManager.GetString("Male", resourceCulture);
             }
         }
         
@@ -111,6 +129,15 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         public static string OnlyInvalid {
             get {
                 return ResourceManager.GetString("OnlyInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Khác.
+        /// </summary>
+        public static string Other {
+            get {
+                return ResourceManager.GetString("Other", resourceCulture);
             }
         }
         

@@ -1,6 +1,7 @@
 ﻿using Dapper;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -114,6 +115,35 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
                     ErrorCode = CORE.Enum.ErrorCode.FAIL,
                     Message = Resource.Fail.ToString(),
                     StatusCode = 400
+                };
+            }
+        }
+
+        public ResponseResult GetAllData<G>()
+        {
+            var nameGeneric = typeof(T).Name;
+            this._dbConnection.Open();
+            var proc = $"Proc_{nameGeneric}_GetAll";
+            var result = this._dbConnection.GetConnection().Query<G>(sql: proc, commandType: CommandType.StoredProcedure);
+            this._dbConnection.Close();
+            if (result != null)
+            {
+                return new ResponseResult()
+                {
+                    Data = result,
+                    ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
+                    Message = Resource.Success.ToString(),
+                    StatusCode = 200
+                };
+            }
+            else
+            {
+                return new ResponseResult()
+                {
+                    Data = null,
+                    ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
+                    Message = Resource.NotFound.ToString(),
+                    StatusCode = 404
                 };
             }
         }
