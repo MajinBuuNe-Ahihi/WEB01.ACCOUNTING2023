@@ -49,6 +49,8 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                 workSheet.Cells[3, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
                 workSheet.Cells[3, 1].Style.Fill.BackgroundColor.SetColor(Color.SlateGray);
                 workSheet.Cells[3, 1].Style.Font.Bold = true;
+                workSheet.Cells[3, 1].Style.Border.Right.Style = ExcelBorderStyle.Medium;
+                workSheet.Cells[3, 1].Style.Border.Right.Color.SetColor(Color.Black);
                 workSheet.Columns[1].Width = 5;
                 workSheet.Columns[1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
                 properties.ForEach((PropertyInfo prop) =>
@@ -71,20 +73,22 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                         workSheet.Cells[3, colHeader].Style.Fill.PatternType = ExcelFillStyle.Solid;
                                         workSheet.Cells[3, colHeader].Style.Fill.BackgroundColor.SetColor(Color.SlateGray);
                                         workSheet.Cells[3, colHeader].Style.Font.Bold = true;
+                                        workSheet.Cells[3, colHeader].Style.Border.Right.Style = ExcelBorderStyle.Medium;
+                                        workSheet.Cells[3, colHeader].Style.Border.Right.Color.SetColor(Color.Black);
                                         workSheet.Columns[colHeader].Width = obj.Width > 0 ? obj.Width : 20;
                                         workSheet.Columns[colHeader].Style.WrapText = true;
                                         workSheet.Columns[colHeader].Style.Numberformat.Format = prop.Name;
                                         if (obj.ColumnHorizontal == ExcelHorizontal.LEFT)
                                         {
                                             workSheet.Columns[colHeader].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Left;
-                                            workSheet.Columns[colHeader].Style.Indent = 5;
+                                            workSheet.Columns[colHeader].Style.Indent = 2;
                                         }
                                         else
                                         {
                                             if (obj.ColumnHorizontal == ExcelHorizontal.RIGHT)
                                             {
                                                 workSheet.Columns[colHeader].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Right;
-                                                workSheet.Columns[colHeader].Style.Indent = 5;
+                                                workSheet.Columns[colHeader].Style.Indent = 2;
 
                                             }
                                             else
@@ -125,7 +129,10 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         }
                         if (type == typeof(Gender) || type == typeof(Nullable<Gender>))
                         {
-                            workSheet.Cells[indexRow, index].Value = ((Gender)value == Gender.FEMALE?Resource.Resource.Female:(Gender)value == Gender.MALE? Resource.Resource.Male: Resource.Resource.Other);
+                            workSheet.Cells[indexRow, index].Value = ((Gender)value == Gender.FEMALE?Resource.Resource.Female:
+                            (Gender)value == Gender.MALE?
+                            (Gender)value == Gender.OTHER? Resource.Resource.Male:
+                            Resource.Resource.Other:null);
                         }
                         else
                         {  if(name == "DepartmentId")
@@ -156,6 +163,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
 
         public ResponseResult ImportFile(IFormFile file)
         {
+            // khởi tạo list errors
             Dictionary<string, string> ListErrors = new Dictionary<string, string>();
             if (file == null)
             {
@@ -233,7 +241,9 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                                 }
                                                 break;
                                             }
-                                        case "Gender": value = (value == Resource.Resource.Female? Gender.FEMALE : value == Resource.Resource.Male ? Gender.MALE : Gender.OTHER); break;
+                                        case "Gender": value = (value == Resource.Resource.Female?
+                                                Gender.FEMALE : value == Resource.Resource.Male ? 
+                                                Gender.MALE : value == Resource.Resource.Other?Gender.OTHER:null); break;
                                         default: break;
                                         }
                                         proInfo.SetValue(employee, value, null);
