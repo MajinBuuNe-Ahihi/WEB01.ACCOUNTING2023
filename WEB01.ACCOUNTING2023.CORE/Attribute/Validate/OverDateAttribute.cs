@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Resources;
+
 
 namespace WEB01.ACCOUNTING2023.CORE.Attribute.Validate
 {
@@ -15,7 +17,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Attribute.Validate
         }
         public string Info { get
             {
-                return _info + Resource.Resource.OverDate;
+                return new ResourceManager(typeof(Resource.Resource)).GetString(_info) +" "+ Resource.Resource.OverDate;
             }
         }
     }

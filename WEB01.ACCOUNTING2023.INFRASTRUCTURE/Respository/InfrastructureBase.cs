@@ -17,6 +17,7 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         #region Field
         IDatabase _dbConnection;
         #endregion
+
         #region Constructor
         /// <summary>
         ///  constructor
@@ -32,9 +33,12 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 
         public ResponseResult DeleteDataByID(Guid id)
         {
+            try
+            {
+
             var nameGeneric = typeof(T).Name;
             DynamicParameters dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add($"@v_{nameGeneric.Substring(0, nameGeneric.Length - 1)}Id", id);
+            dynamicParameters.Add($"@v_{nameGeneric}Id", id);
 
             if (dynamicParameters != null)
             {
@@ -73,24 +77,79 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
                     StatusCode = 400
                 };
             }
+            }catch (Exception ex)
+            {
+                this._dbConnection.Close();
+                throw ex;
+            }
         }
 
         public ResponseResult GetDataByID(Guid id)
         {
-            var nameGeneric = typeof(T).Name;
-            DynamicParameters dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add($"@v_{nameGeneric.Substring(0, nameGeneric.Length - 1)}Id", id);
-            if (dynamicParameters != null)
+            try
             {
-                this._dbConnection.Open();
-                var proc = $"Proc_{nameGeneric}_GetById";
-                var results =    this._dbConnection.GetConnection().QueryFirstOrDefault<T>(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
-                this._dbConnection.Close();
-                if (results != null)
+                var nameGeneric = typeof(T).Name;
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add($"@v_{nameGeneric}Id", id);
+                if (dynamicParameters != null)
+                {
+                    this._dbConnection.Open();
+                    var proc = $"Proc_{nameGeneric}_GetById";
+                    var results = this._dbConnection.GetConnection().QueryFirstOrDefault<T>(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
+                    this._dbConnection.Close();
+                    if (results != null)
+                    {
+                        return new ResponseResult()
+                        {
+                            Data = results,
+                            ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
+                            Message = Resource.Success.ToString(),
+                            StatusCode = 200
+                        };
+                    }
+                    else
+                    {
+                        return new ResponseResult()
+                        {
+                            Data = null,
+                            ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
+                            Message = Resource.NotFound.ToString(),
+                            StatusCode = 404
+                        };
+                    }
+                }
+                else
                 {
                     return new ResponseResult()
                     {
-                        Data = results,
+                        Data = null,
+                        ErrorCode = CORE.Enum.ErrorCode.FAIL,
+                        Message = Resource.Fail.ToString(),
+                        StatusCode = 400
+                    };
+                }
+            }
+            catch(Exception ex)
+            {
+                this._dbConnection.Close();
+                throw ex;
+            }
+        }
+
+        public ResponseResult GetAllData<G>()
+        {
+            try
+            {
+                var nameGeneric = typeof(T).Name;
+                this._dbConnection.Open();
+                var proc = $"Proc_{nameGeneric}_GetAll";
+                var result = this._dbConnection.GetConnection().Query<G>(sql: proc, commandType: CommandType.StoredProcedure);
+                this._dbConnection.Close();
+                if (result != null)
+                {
+                    return new ResponseResult()
+                    {
+                        Data = result,
                         ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
                         Message = Resource.Success.ToString(),
                         StatusCode = 200
@@ -107,44 +166,10 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
                     };
                 }
             }
-            else
+            catch (Exception ex)
             {
-                return new ResponseResult()
-                {
-                    Data = null,
-                    ErrorCode = CORE.Enum.ErrorCode.FAIL,
-                    Message = Resource.Fail.ToString(),
-                    StatusCode = 400
-                };
-            }
-        }
-
-        public ResponseResult GetAllData<G>()
-        {
-            var nameGeneric = typeof(T).Name;
-            this._dbConnection.Open();
-            var proc = $"Proc_{nameGeneric}_GetAll";
-            var result = this._dbConnection.GetConnection().Query<G>(sql: proc, commandType: CommandType.StoredProcedure);
-            this._dbConnection.Close();
-            if (result != null)
-            {
-                return new ResponseResult()
-                {
-                    Data = result,
-                    ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
-                    Message = Resource.Success.ToString(),
-                    StatusCode = 200
-                };
-            }
-            else
-            {
-                return new ResponseResult()
-                {
-                    Data = null,
-                    ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
-                    Message = Resource.NotFound.ToString(),
-                    StatusCode = 404
-                };
+                this._dbConnection.Close();
+                throw ex;
             }
         }
         #endregion

@@ -16,14 +16,14 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Services
         ///  createby: HVManh (13/3/2023)
         /// </summary>
         /// <param name="entity">đối tượng nhân viên cần thêm</param>
-        public ResponseResult Insert(Employees entity);
+        public ResponseResult Insert(Employee entity);
 
         /// <summary>
         /// sửa dữ liệu
         ///  createby: HVManh (13/3/2023)
         /// </summary>
         /// <param name="entity">đối tượng nhân viên cần thêm</param>
-        public ResponseResult Update(Employees entity,Nullable<Guid> id);
+        public ResponseResult Update(Employee entity,Nullable<Guid> id);
 
         /// <summary>
         ///  xuất excel theo danh sách id

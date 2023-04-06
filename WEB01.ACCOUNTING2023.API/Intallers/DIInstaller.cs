@@ -20,7 +20,7 @@ namespace WEB01.ACCOUNTING2023.API.Intallers
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IEmployeeServices, EmployeeServices>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<IImportExportServices<EmployeesDTO>, ExcelServices<EmployeesDTO, EmployeeExcelDTO>>();
+            services.AddScoped<IImportExportServices<EmployeeDTO>, ExcelServices<EmployeeDTO, EmployeeExcelDTO>>();
         }
     }
 }

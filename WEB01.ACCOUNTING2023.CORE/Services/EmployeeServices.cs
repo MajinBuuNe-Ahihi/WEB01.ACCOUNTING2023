@@ -18,11 +18,11 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
     {
         #region Field
         IEmployeeRepository  _employeeRepository;
-        IImportExportServices<EmployeesDTO> _importExportServices;
+        IImportExportServices<EmployeeDTO> _importExportServices;
         #endregion
 
         #region Constructor
-        public EmployeeServices(IEmployeeRepository employeeRepository, IImportExportServices<EmployeesDTO> importExportServices) { 
+        public EmployeeServices(IEmployeeRepository employeeRepository, IImportExportServices<EmployeeDTO> importExportServices) { 
             _employeeRepository = employeeRepository;
             _importExportServices = importExportServices;
         }
@@ -55,8 +55,9 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                         var result = _employeeRepository.GetDataByID((Guid)id);
                                         if (result.Data != null)
                                         {
-                                            var data = (Employees)result.Data;
-                                            if (data .EmployeeCode != prop.GetValue(entity, null))
+                                            var data = (Employee)result.Data;
+                                            var entityEmployeeCode = prop.GetValue(entity, null);
+                                            if (data .EmployeeCode.ToString() != entityEmployeeCode.ToString())
                                             {
                                                 var value= _employeeRepository.GetDataByCode((string)prop.GetValue(entity, null));
                                                 if ( value.Data != null)
@@ -82,9 +83,9 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             }
         }
 
-        public ResponseResult Insert(Employees entity)
+        public ResponseResult Insert(Employee entity)
         {
-           ValidateData<Employees>(entity,null);
+           ValidateData<Employee>(entity,null);
             if(ListErrors.Count == 0)
             {
                 var result = _employeeRepository.InsertData(entity);
@@ -104,16 +105,16 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             }
             else
             {
-                var result = _employeeRepository.GetAllData<EmployeesDTO>();
+                var result = _employeeRepository.GetAllData<EmployeeDTO>();
                 var value = _importExportServices.ExportFile(result.Data);
                 return value;
             }
 
         }
 
-        public ResponseResult Update(Employees entity, Guid? id)
+        public ResponseResult Update(Employee entity, Guid? id)
         {
-            ValidateData<Employees>(entity, id);
+            ValidateData<Employee>(entity, id);
             if (ListErrors.Count == 0 && id != null)
             {
                 var result = _employeeRepository.UpdateData(entity, (Guid)id);

@@ -13,7 +13,7 @@ using WEB01.ACCOUNTING2023.CORE.Resource;
 
 namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 {
-    public class DepartmentRepository : InfrastructureBase<Departments>, IDepartmentRepository
+    public class DepartmentRepository : InfrastructureBase<Department>, IDepartmentRepository
     {
         #region Field
         IDatabase _dbConnection;
@@ -36,43 +36,50 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 
         public  ResponseResult GetDataByFilterValue(string value)
         {
-            this._dbConnection.Open();
-            DynamicParameters dynamicParameters = new DynamicParameters();
-            dynamicParameters.Add("@v_Value", value);
-            string proc = "Proc_Departments_Filter";
-            if (dynamicParameters != null)
+            try
             {
-                var results = (this._dbConnection.GetConnection()).Query<Departments>(sql: proc, param: dynamicParameters, commandType: CommandType.StoredProcedure);
-                if (results != null)
+                this._dbConnection.Open();
+                DynamicParameters dynamicParameters = new DynamicParameters();
+                dynamicParameters.Add("@v_Value", value);
+                string proc = "Proc_Department_Filter";
+                if (dynamicParameters != null)
                 {
-                    return new ResponseResult()
+                    var results = (this._dbConnection.GetConnection()).Query<Department>(sql: proc, param: dynamicParameters, commandType: CommandType.StoredProcedure);
+                    if (results != null)
                     {
-                        Data = results,
-                        ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
-                        Message = Resource.Success.ToString(),
-                        StatusCode = 200
-                    };
+                        return new ResponseResult()
+                        {
+                            Data = results,
+                            ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
+                            Message = Resource.Success.ToString(),
+                            StatusCode = 200
+                        };
+                    }
+                    else
+                    {
+                        return new ResponseResult()
+                        {
+                            Data = null,
+                            ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
+                            Message = Resource.NotFound.ToString(),
+                            StatusCode = 404
+                        };
+                    }
                 }
                 else
                 {
                     return new ResponseResult()
                     {
                         Data = null,
-                        ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
-                        Message = Resource.NotFound.ToString(),
-                        StatusCode = 404
+                        ErrorCode = CORE.Enum.ErrorCode.FAIL,
+                        Message = Resource.Fail.ToString(),
+                        StatusCode = 400
                     };
                 }
             }
-            else
-            {
-                return new ResponseResult()
-                {
-                    Data = null,
-                    ErrorCode = CORE.Enum.ErrorCode.FAIL,
-                    Message = Resource.Fail.ToString(),
-                    StatusCode = 400
-                };
+            catch (Exception ex) {
+                this._dbConnection.Close();
+                throw ex;
             }
         }
         #endregion

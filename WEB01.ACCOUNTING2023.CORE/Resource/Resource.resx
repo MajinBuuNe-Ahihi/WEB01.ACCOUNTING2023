@@ -117,6 +117,12 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="DateOfBirth" xml:space="preserve">
+    <value>Ngày sinh</value>
+  </data>
+  <data name="DepartmentId" xml:space="preserve">
+    <value>Mã phòng ban</value>
+  </data>
   <data name="DuplicateCode" xml:space="preserve">
     <value>Mã đã tồn tại</value>
   </data>
@@ -124,11 +130,20 @@
     <value>Email không đúng định dạng</value>
     <comment>mes error yêu cầu email đúng định dạng</comment>
   </data>
+  <data name="EmployeeCode" xml:space="preserve">
+    <value>Mã nhân viên</value>
+  </data>
   <data name="Fail" xml:space="preserve">
     <value>Thực hiện không thành công!</value>
   </data>
   <data name="Female" xml:space="preserve">
     <value>Nữ</value>
+  </data>
+  <data name="FullName" xml:space="preserve">
+    <value>Tên nhân viên</value>
+  </data>
+  <data name="IdentityDate" xml:space="preserve">
+    <value>Ngày cấp</value>
   </data>
   <data name="InvalidData" xml:space="preserve">
     <value>Dữ liệu không đúng định dạng</value>
@@ -140,7 +155,7 @@
     <value>Bản ghi không tồn tại!</value>
   </data>
   <data name="OnlyInvalid" xml:space="preserve">
-    <value>Đã tồn tại</value>
+    <value>đã tồn tại</value>
     <comment>thông báo kiểu tra property đã trùng</comment>
   </data>
   <data name="Other" xml:space="preserve">

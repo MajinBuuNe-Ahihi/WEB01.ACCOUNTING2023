@@ -4,12 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
-{
+namespace WEB01.ACCOUNTING2023.CORE.Entities.DTO
+{ 
     /// <summary>
-    ///  đối tượng phòng ban
+    ///  đối tượng hiển thị phòng ban
     /// </summary>
-    public class Departments:BaseEntity
+    public class DepartmentDTO
     {
         /// <summary>
         ///   mã  phòng ban
@@ -28,6 +28,5 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         ///  createby: HVManh (13/3/2023)
         /// </summary>
         public string DepartmentName { get; set; }
-
     }
 }

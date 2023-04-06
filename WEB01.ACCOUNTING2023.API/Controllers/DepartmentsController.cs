@@ -7,7 +7,7 @@ using WEB01.ACCOUNTING2023.CORE.Resource;
 
 namespace WEB01.ACCOUNTING2023.API.Controllers
 {
-    public class DepartmentsController : BaseController<Departments>
+    public class DepartmentsController : BaseController<Department>
     {
         #region Field
         IDepartmentRepository _departmentRepository;
@@ -15,7 +15,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #endregion
 
         #region Constructor
-        public DepartmentsController(IIfrastructureBase<Departments> ifrastructureBase,
+        public DepartmentsController(IIfrastructureBase<Department> ifrastructureBase,
             IDepartmentRepository departmentRepository,
             ILogger<DepartmentsController> logger) : base(ifrastructureBase,logger)
         {
@@ -31,7 +31,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         {
             try
             {
-                var value = _departmentRepository.GetAllData<Departments>();
+                var value = _departmentRepository.GetAllData<Department>();
                 return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)

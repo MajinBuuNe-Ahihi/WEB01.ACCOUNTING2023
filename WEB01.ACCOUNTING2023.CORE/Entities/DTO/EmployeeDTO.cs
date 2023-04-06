@@ -12,7 +12,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.DTO
     /// <summary>
     ///  đối tượng hiển thị nhân viên
     /// </summary>
-    public class EmployeesDTO
+    public class EmployeeDTO
     {
         /// <summary>
         ///  mã nhân viên

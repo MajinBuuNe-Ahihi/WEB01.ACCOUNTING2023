@@ -12,7 +12,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
     /// <summary>
     ///  đối tượng nhân viên
     /// </summary>
-    public class Employees : BaseEntity
+    public class Employee : BaseEntity
     {
         /// <summary>
         ///  mã nhân viên
@@ -24,7 +24,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         /// code nhân viên
         /// createby: HVManh (13/3/2023)
         /// </summary>
-        [Required("Mã code")]
+        [Required("EmployeeCode")]
         [Only("EmployeeCode")]
         public string EmployeeCode { get; set; }
 
@@ -32,7 +32,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         ///  mã  phòng ban
         ///  createby: HVManh (13/3/2023)
         /// </summary>
-        [Required("Mã phòng ban")]
+        [Required("DepartmentId")]
         public Guid DepartmentId { get; set; }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         ///  tên nhân viên
         ///  createby: HVManh (13/3/2023)
         /// </summary>
-        [Required("Tên nhân viên")]
+        [Required("FullName")]
         public string FullName { get; set; }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         ///  ngày sinh nhân viên
         ///  createby: HVManh (13/3/2023)
         /// </summary>
-        [OverDate("Ngày sinh")]
+        [OverDate("DateOfBirth")]
         public DateTime? DateOfBirth { get; set; }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         ///  ngày cấp cmnd
         ///  createby: HVManh (13/3/2023)
         /// </summary>
-        [OverDate("Ngày cấp")]
+        [OverDate("IdentityDate")]
         public DateTime? IdentityDate { get; set; }
 
         /// <summary>

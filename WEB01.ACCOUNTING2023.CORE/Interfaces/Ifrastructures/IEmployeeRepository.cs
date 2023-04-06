@@ -8,7 +8,7 @@ using WEB01.ACCOUNTING2023.CORE.Entities.Models;
 
 namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
 {
-    public interface IEmployeeRepository:IIfrastructureBase<Employees>
+    public interface IEmployeeRepository:IIfrastructureBase<Employee>
     {
         /// <summary>
         ///  lấy danh  mã code mới
@@ -57,7 +57,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
         /// </summary>
         /// <param name="data">Đố tượng nhân viên</param>
         /// <returns>số dòng tác động</returns>
-        public ResponseResult InsertData(Employees data);
+        public ResponseResult InsertData(Employee data);
 
         /// <summary>
         ///  cập nhật data theo id
@@ -66,6 +66,6 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
         /// <param name="data">đối tượng nhân viên</param>
         /// <param name="id">mã của nhân viên</param>
         /// <returns></returns>
-        public ResponseResult UpdateData(Employees data, Guid id);
+        public ResponseResult UpdateData(Employee data, Guid id);
     }
 }

@@ -38,7 +38,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         if (obj.GetType() == typeof(RequiredAttribute))
                         {
                             RequiredAttribute requiredAttribute = (RequiredAttribute)obj;
-                            if (prop.GetValue(entity, null) == null)
+                            if (prop.GetValue(entity, null) == null || prop.GetValue(entity, null) == "")
                             {
                                 ListErrors.Add(prop.Name, requiredAttribute.Info);
                             }
@@ -64,8 +64,8 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                             if (prop.GetValue(entity, null) != null)
                             {
                                 var date = prop.GetValue(entity, null);
-                                var dateCurrent = new DateTime();
-                                if (DateTime.Compare((DateTime)date, dateCurrent) == -1)
+                                var dateCurrent = DateTime.Now;
+                                if (DateTime.Compare((DateTime)date, dateCurrent) == 1)
                                 {
                                     ListErrors.Add(prop.Name, overDateAttribute.Info);
                                 }

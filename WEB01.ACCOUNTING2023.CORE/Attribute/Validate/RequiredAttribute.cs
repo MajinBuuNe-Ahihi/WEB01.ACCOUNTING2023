@@ -20,7 +20,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Attribute.Validate
         {
             get
             {
-                return _info + Resource.Resource.Required;
+                return new ResourceManager(typeof(Resource.Resource)).GetString(_info) +" "+ Resource.Resource.Required;
             }
         }
     }

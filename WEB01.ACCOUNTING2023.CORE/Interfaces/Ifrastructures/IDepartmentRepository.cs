@@ -8,7 +8,7 @@ using WEB01.ACCOUNTING2023.CORE.Entities.Models;
 
 namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
 {
-    public interface IDepartmentRepository:IIfrastructureBase<Departments>
+    public interface IDepartmentRepository:IIfrastructureBase<Department>
     {
         /// <summary>
         ///  lấy danh sách phòng ban dự vào giá trị tìm kiếm

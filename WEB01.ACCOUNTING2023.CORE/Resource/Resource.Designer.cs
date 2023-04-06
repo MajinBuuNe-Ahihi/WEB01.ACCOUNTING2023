@@ -61,6 +61,24 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Ngày sinh.
+        /// </summary>
+        public static string DateOfBirth {
+            get {
+                return ResourceManager.GetString("DateOfBirth", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Mã phòng ban.
+        /// </summary>
+        public static string DepartmentId {
+            get {
+                return ResourceManager.GetString("DepartmentId", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Mã đã tồn tại.
         /// </summary>
         public static string DuplicateCode {
@@ -79,6 +97,15 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Mã nhân viên.
+        /// </summary>
+        public static string EmployeeCode {
+            get {
+                return ResourceManager.GetString("EmployeeCode", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Thực hiện không thành công!.
         /// </summary>
         public static string Fail {
@@ -93,6 +120,24 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         public static string Female {
             get {
                 return ResourceManager.GetString("Female", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Tên nhân viên.
+        /// </summary>
+        public static string FullName {
+            get {
+                return ResourceManager.GetString("FullName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Ngày cấp.
+        /// </summary>
+        public static string IdentityDate {
+            get {
+                return ResourceManager.GetString("IdentityDate", resourceCulture);
             }
         }
         
@@ -124,7 +169,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Đã tồn tại.
+        ///   Looks up a localized string similar to đã tồn tại.
         /// </summary>
         public static string OnlyInvalid {
             get {

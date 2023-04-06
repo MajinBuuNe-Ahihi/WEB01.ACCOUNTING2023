@@ -129,18 +129,18 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         }
                         if (type == typeof(Gender) || type == typeof(Nullable<Gender>))
                         {
-                            workSheet.Cells[indexRow, index].Value = ((Gender)value == Gender.FEMALE?Resource.Resource.Female:
-                            (Gender)value == Gender.MALE?
-                            (Gender)value == Gender.OTHER? Resource.Resource.Male:
-                            Resource.Resource.Other:null);
+                            var gender = (Gender)value == Gender.FEMALE ? Resource.Resource.Female :
+                            (Gender)value == Gender.MALE ? Resource.Resource.Female : Resource.Resource.Other;
+                        
+                            workSheet.Cells[indexRow, index].Value = gender.ToString() ;
                         }
                         else
                         {  if(name == "DepartmentId")
                             {
                                 var result =  _departmentRepository.GetDataByID(new Guid(value.ToString()));
-                                if (result.Data != null && ((Departments)result.Data).DepartmentName != null)
+                                if (result.Data != null && ((Department)result.Data).DepartmentName != null)
                                 {
-                                    workSheet.Cells[indexRow, index].Value = ((Departments) result.Data).DepartmentName;
+                                    workSheet.Cells[indexRow, index].Value = ((Department) result.Data).DepartmentName;
                                     workSheet.Cells[indexRow, index].Style.Numberformat.Format = value.ToString();
                                 }
                             }
@@ -195,7 +195,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
 
                         for (int i = 4; i <= row; i++)
                         {
-                            var employee = new Employees();
+                            var employee = new Employee();
                             string codeEmployee = "";
                             string error = "";
                             string text = "";
@@ -241,14 +241,22 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                                 }
                                                 break;
                                             }
-                                        case "Gender": value = (value == Resource.Resource.Female?
-                                                Gender.FEMALE : value == Resource.Resource.Male ? 
-                                                Gender.MALE : value == Resource.Resource.Other?Gender.OTHER:null); break;
+                                        case "Gender":
+                                                Gender temple = (value.ToString().Trim() == Resource.Resource.Female.ToString().Trim() ?
+                                                Gender.FEMALE : value.ToString().Trim() == Resource.Resource.Male.ToString().Trim() ? 
+                                                Gender.MALE : Gender.OTHER);
+                                                value = temple;
+                                            break;
                                         default: break;
                                         }
                                         proInfo.SetValue(employee, value, null);
                                     }
-                                    var result =  _employeeRepository.InsertData((Employees)employee);
+                                employee.CreateBy = "HoangVanManh";
+                                employee.ModifierBy = "HoangVanManh";
+                                employee.CreateDate = DateTime.Now;
+                                employee.ModifierDate = DateTime.Now;
+
+                                var result =  _employeeRepository.InsertData((Employee)employee);
                             }catch(Exception ex)
                             {
                                 ListErrors.Add(codeEmployee + "--"+ DateTime.Now.Ticks, error + " " + text);

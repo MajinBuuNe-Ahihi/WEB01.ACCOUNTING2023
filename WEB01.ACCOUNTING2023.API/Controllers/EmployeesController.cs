@@ -9,7 +9,7 @@ using WEB01.ACCOUNTING2023.CORE.Resource;
 namespace WEB01.ACCOUNTING2023.API.Controllers
 {
 
-    public class EmployeesController : BaseController<Employees>
+    public class EmployeesController : BaseController<Employee>
     {
         #region Field
         IEmployeeServices _employeeServices;
@@ -18,7 +18,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #endregion
 
         #region Constructor
-        public EmployeesController(IIfrastructureBase<Employees> ifrastructureBase,
+        public EmployeesController(IIfrastructureBase<Employee> ifrastructureBase,
             IEmployeeRepository employeeRepository,
             IEmployeeServices employeeServices,
             ILogger<EmployeesController> logger) : base(ifrastructureBase, logger)
@@ -28,6 +28,8 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
             _logger = logger;
         }
         #endregion
+
+        #region Method
 
         #region HTTPGET
         /// <summary>
@@ -124,7 +126,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         /// <param name="employees">thông tin nhân viên</param>
         /// <returns> httpresult</returns>
         [HttpPost]
-        public IActionResult InsertNewEmployee([FromBody] Employees employees)
+        public IActionResult InsertNewEmployee([FromBody] Employee employees)
         {
             try
             {
@@ -236,12 +238,12 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         /// <param name = "employees" > thông tin nhân viên</param>
         /// <returns> httpresult</returns>
         [HttpPut]
-        public IActionResult UpdateEmployee([FromBody] Employees employees)
+        public IActionResult UpdateEmployee([FromBody] Employee employees)
         {
             try
             {
                 var value = _employeeServices.Update(employees,employees.EmployeeId);
-                return StatusCode(201, value);
+                return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)
             {
@@ -256,6 +258,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
                 });
             }
         }
+        #endregion
         #endregion
     }
 }
