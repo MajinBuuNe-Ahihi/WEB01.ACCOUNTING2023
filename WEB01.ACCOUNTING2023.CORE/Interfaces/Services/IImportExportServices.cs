@@ -17,7 +17,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Services
         /// </summary>
         /// <param name="data">entity</param>
         /// <returns></returns>
-        public MemoryStream ExportFile(List<T> data);
+        public byte[] ExportFile(List<T> data);
 
         /// <summary>
         /// nhập file dữ liệu

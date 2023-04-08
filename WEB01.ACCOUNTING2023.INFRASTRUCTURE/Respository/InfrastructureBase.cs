@@ -35,17 +35,20 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         {
             try
             {
-
+            // lấy tên đối tượng đc truyền vào
             var nameGeneric = typeof(T).Name;
+             // khởi tạo tham sô proc
             DynamicParameters dynamicParameters = new DynamicParameters();
             dynamicParameters.Add($"@v_{nameGeneric}Id", id);
 
             if (dynamicParameters != null)
             {
+                 // mở kết nối lấy dữ liệu
                 this._dbConnection.Open();
                 var proc = $"Proc_{nameGeneric}_DeleteByID";
                 var results =  this._dbConnection.GetConnection().Execute(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
                 this._dbConnection.Close();
+                // trả về dữ liệu
                 if (results != 0)
                 {
                     return new ResponseResult()
@@ -88,15 +91,19 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         {
             try
             {
+                // lấy tên đối tượng 
                 var nameGeneric = typeof(T).Name;
+                // khởi tạo tham số proc
                 DynamicParameters dynamicParameters = new DynamicParameters();
                 dynamicParameters.Add($"@v_{nameGeneric}Id", id);
                 if (dynamicParameters != null)
                 {
+                    // khởi tạo kết nối, lấy dữ liệu
                     this._dbConnection.Open();
                     var proc = $"Proc_{nameGeneric}_GetById";
                     var results = this._dbConnection.GetConnection().QueryFirstOrDefault<T>(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
                     this._dbConnection.Close();
+                    // trả về dữ liệu
                     if (results != null)
                     {
                         return new ResponseResult()
@@ -140,11 +147,14 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         {
             try
             {
+                // lấy tên đối tượng
                 var nameGeneric = typeof(T).Name;
+                // mở kết nối lấy dữ liệu
                 this._dbConnection.Open();
                 var proc = $"Proc_{nameGeneric}_GetAll";
                 var result = this._dbConnection.GetConnection().Query<G>(sql: proc, commandType: CommandType.StoredProcedure);
                 this._dbConnection.Close();
+                // trả về dữ liệu
                 if (result != null)
                 {
                     return new ResponseResult()

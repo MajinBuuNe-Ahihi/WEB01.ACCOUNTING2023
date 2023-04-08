@@ -26,9 +26,12 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
         #region Method
         public  virtual void ValidateData<T>(T entity, Guid? id)
         {
+            // lấy tất cả các prop
             PropertyInfo[] props = typeof(T).GetProperties();
+            // duyệt qua danh sách props
             foreach (PropertyInfo prop in props)
             {
+                // lấy thông tin các attribute custom thực hiện thao tác
                 var objects = prop.GetCustomAttributes(true);
                 if (objects != null)
                 {

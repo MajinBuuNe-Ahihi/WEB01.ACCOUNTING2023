@@ -38,10 +38,12 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         {
             try
             {
+                // khởi tạo kết nối, lấy dữ liệu
                 this._dbConnection.Open();
                 DynamicParameters dynamicParameters = new DynamicParameters();
                 dynamicParameters.Add("@v_Value", value);
                 string proc = "Proc_Department_Filter";
+                // trả về dữ liệu
                 if (dynamicParameters != null)
                 {
                     var results = (this._dbConnection.GetConnection()).Query<Department>(sql: proc, param: dynamicParameters, commandType: CommandType.StoredProcedure);

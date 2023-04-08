@@ -67,5 +67,13 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
         /// <param name="id">mã của nhân viên</param>
         /// <returns></returns>
         public ResponseResult UpdateData(Employee data, Guid id);
+
+        /// <summary>
+        ///  lấy danh sach nhân viên dựa trên keyword
+        ///  create by: HV Mạnh (9/4/2023)
+        /// </summary>
+        /// <param name="keyWord"></param>
+        /// <returns></returns>
+        public ResponseResult GetEmployeeByKeyWord<T>(string keyWord);
     }
 }

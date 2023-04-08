@@ -30,9 +30,12 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
 
         #region Methods
         public  override void ValidateData<T>(T entity, Guid? id)
-        {
+        {// thực hiện validate base
            base.ValidateData<T>(entity,id);
+            //lấy danh sách props
             PropertyInfo[] props = typeof(T).GetProperties();
+
+            // duyệt từng props lấy attribute validate theo attribute
             foreach (PropertyInfo prop in props)
             {
                 var objects = prop.GetCustomAttributes(true);
@@ -85,27 +88,31 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
 
         public ResponseResult Insert(Employee entity)
         {
+            // validate
            ValidateData<Employee>(entity,null);
+            // thao tác db
             if(ListErrors.Count == 0)
             {
                 var result = _employeeRepository.InsertData(entity);
                 return result;
             }
-
+            // trả về dư liệu
             return new ResponseResult() { Data = null, ErrorCode = CORE.Enum.ErrorCode.INVALID, Message = Resource.Resource.InvalidData.ToString(), StatusCode = 400, MoreInfo = ListErrors };
         }
 
-        public MemoryStream ExportFile(string ids, string type = "byids")
+        public byte[] ExportFile(string ids, string type = "byids",string keyWord="")
         {
+            // kiểm tra type
             if(type == "byids")
-            {
+            {   // lấy dữ liệu từ db
                 var result = _employeeRepository.GetEmployeeByIDs(ids);
+                // thực hiện export
                 var value =_importExportServices.ExportFile(result.Data);
                 return value;
             }
             else
             {
-                var result = _employeeRepository.GetAllData<EmployeeDTO>();
+                var result = _employeeRepository.GetEmployeeByKeyWord<EmployeeDTO>(keyWord);
                 var value = _importExportServices.ExportFile(result.Data);
                 return value;
             }
@@ -114,12 +121,15 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
 
         public ResponseResult Update(Employee entity, Guid? id)
         {
+            // validate
             ValidateData<Employee>(entity, id);
             if (ListErrors.Count == 0 && id != null)
             {
+                // thực hiện thao tác
                 var result = _employeeRepository.UpdateData(entity, (Guid)id);
                 return result;
             }
+            // trả về dữ liệu
             return new ResponseResult() { Data = null, ErrorCode = CORE.Enum.ErrorCode.INVALID, Message = Resource.Resource.InvalidData.ToString(), StatusCode = 400, MoreInfo = ListErrors };
         }
 

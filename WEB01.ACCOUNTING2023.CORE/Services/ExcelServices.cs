@@ -32,7 +32,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             _departmentRepository = departmentRepository;
         }
         #endregion
-        public MemoryStream ExportFile(List<T> data)
+        public byte[] ExportFile(List<T> data)
         {
             MemoryStream memoryStream = new MemoryStream();
             using (ExcelPackage package = new ExcelPackage())
@@ -41,18 +41,21 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                 List<PropertyInfo> properties = typeof(G).GetProperties().ToList<PropertyInfo>();
                 // lưu tên các attribute
                 List<string> nameProperties = new List<string>();
-                // tạo header
+                // vẽ header excel
                 var workSheet = package.Workbook.Worksheets.Add("Employee");
                 workSheet.Cells[1, 1].Value = "DANH SÁCH NHÂN VIÊN";
                 int colHeader = 2;
                 workSheet.Cells[3, 1].LoadFromText("STT");
                 workSheet.Cells[3, 1].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                workSheet.Cells[3, 1].Style.Fill.BackgroundColor.SetColor(Color.SlateGray);
+                workSheet.Cells[3, 1].Style.Fill.BackgroundColor.SetColor(Color.Gray);
+                workSheet.Cells[3, 1].Style.Font.Color.SetColor(Color.White);
                 workSheet.Cells[3, 1].Style.Font.Bold = true;
                 workSheet.Cells[3, 1].Style.Border.Right.Style = ExcelBorderStyle.Medium;
                 workSheet.Cells[3, 1].Style.Border.Right.Color.SetColor(Color.Black);
                 workSheet.Columns[1].Width = 5;
                 workSheet.Columns[1].Style.HorizontalAlignment = OfficeOpenXml.Style.ExcelHorizontalAlignment.Center;
+
+                // vẽ các label của excel dựa vào prop
                 properties.ForEach((PropertyInfo prop) =>
                 {
 
@@ -71,7 +74,8 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                     {
                                         workSheet.Cells[3,colHeader].LoadFromText(obj.Info);
                                         workSheet.Cells[3, colHeader].Style.Fill.PatternType = ExcelFillStyle.Solid;
-                                        workSheet.Cells[3, colHeader].Style.Fill.BackgroundColor.SetColor(Color.SlateGray);
+                                        workSheet.Cells[3, colHeader].Style.Fill.BackgroundColor.SetColor(Color.Gray);
+                                        workSheet.Cells[3, colHeader].Style.Font.Color.SetColor(Color.White);
                                         workSheet.Cells[3, colHeader].Style.Font.Bold = true;
                                         workSheet.Cells[3, colHeader].Style.Border.Right.Style = ExcelBorderStyle.Medium;
                                         workSheet.Cells[3, colHeader].Style.Border.Right.Color.SetColor(Color.Black);
@@ -111,7 +115,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                 workSheet.Cells[1, 1].Style.Font.Size = 16;
                 workSheet.Cells[1,1,1,colHeader-1].Merge = true;
                 workSheet.Cells[2, 1, 2, colHeader-1].Merge = true;
-                // thêm dữ liệu
+                // vẽ dữ liệu lên các cell
                 int indexRow = 4;
                 data.ForEach((T item) =>
                 {
@@ -158,7 +162,10 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                 // lưu vào stream
                 package.SaveAs(memoryStream);
             }
-            return memoryStream;
+            byte[] byteStream = memoryStream.ToArray();
+            memoryStream.Dispose();
+            // trả về dữ liệu
+            return byteStream;
         }
 
         public ResponseResult ImportFile(IFormFile file)
@@ -178,21 +185,26 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             }
             else
             {
+                // khởi tạo file
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
                     List<string> listName = new List<string>();
                     file.CopyTo(memoryStream);
+
                     using (ExcelPackage package = new ExcelPackage(memoryStream))
                     {
+                        //khởi tạo đối tượng excel
                         var workBook = package.Workbook.Worksheets[0];
                         var row = workBook.Dimension.Rows;
                         var col = workBook.Dimension.Columns;
+                        // lấy các key object thông qua các title
                         for (int i = 2; i <= col; i++)
                         {
                             var value = workBook.Columns[i].Style.Numberformat.Format;
                             listName.Add(value);
                         }
-
+                        
+                        // đọc dữ liệu qua từng cell
                         for (int i = 4; i <= row; i++)
                         {
                             var employee = new Employee();
@@ -216,6 +228,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                             }
                                     }
                                         error = listName[j - 2];
+                                    // kiểm tra dữ liệu convert đầu vào
                                     switch (proInfo.PropertyType.Name)
                                     {
                                         case "Guid": {
@@ -255,7 +268,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                 employee.ModifierBy = "HoangVanManh";
                                 employee.CreateDate = DateTime.Now;
                                 employee.ModifierDate = DateTime.Now;
-
+                                // thêm vào database
                                 var result =  _employeeRepository.InsertData((Employee)employee);
                             }catch(Exception ex)
                             {
