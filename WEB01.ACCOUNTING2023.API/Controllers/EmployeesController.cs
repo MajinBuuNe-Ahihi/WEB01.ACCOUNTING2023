@@ -176,9 +176,12 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         }
 
         /// <summary>
-        /// 
+        ///  export file excel
+        /// createBy: HV Mạnh (4/4/2023)
         /// </summary>
-        /// <param name="ids">chuối danh sách mã nhân viên</param>
+        /// <param name="ids">danh sách ids</param>
+        /// <param name="key">từ khóa</param>
+        /// <param name="type">kiểu export</param>
         /// <returns></returns>
         [HttpPost("export-excel/{type:regex(^(getall|byids)$)}")]
         public IActionResult ExportExcel([FromBody] string ?ids, [FromQuery] string? key,[FromRoute] string type)
