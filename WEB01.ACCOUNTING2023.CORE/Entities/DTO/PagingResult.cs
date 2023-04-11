@@ -6,6 +6,11 @@ using System.Threading.Tasks;
 
 namespace WEB01.ACCOUNTING2023.CORE.Entities.DTO
 {
+    /// <summary>
+    /// đối tượng paging 
+    ///  create by: HV Manh 13/3/2023
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public class PagingResult<T>
     {
         /// <summary>

@@ -14,12 +14,18 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 {
     public class MySQLRepository : IDatabase
     {
+        #region Field
         private readonly MySqlConnection _connect;
+        #endregion
 
+        #region Constructor
         public MySQLRepository(DataBaseConfiguration configuration)
         {
             this._connect = new MySqlConnection(connectionString: configuration.ConnectionString);
         }
+        #endregion
+
+        #region Method
 
         public void Close()
         {
@@ -57,5 +63,6 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         {
             _connect.Dispose();
         }
+        #endregion
     }
 }

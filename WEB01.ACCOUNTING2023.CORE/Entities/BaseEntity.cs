@@ -6,6 +6,10 @@ using System.Threading.Tasks;
 
 namespace WEB01.ACCOUNTING2023.CORE.Entities
 {
+    /// <summary>
+    /// base entity
+    ///  create by: HV Manh 13/3/2023
+    /// </summary>
     public class BaseEntity
     {
         /// <summary>

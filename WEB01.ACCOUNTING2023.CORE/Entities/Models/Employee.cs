@@ -11,6 +11,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
 {
     /// <summary>
     ///  đối tượng nhân viên
+    ///   create by: HV Manh 13/3/2023
     /// </summary>
     public class Employee : BaseEntity
     {

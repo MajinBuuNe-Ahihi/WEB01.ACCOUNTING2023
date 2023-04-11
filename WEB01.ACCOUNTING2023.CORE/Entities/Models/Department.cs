@@ -8,6 +8,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
 {
     /// <summary>
     ///  đối tượng phòng ban
+    ///   create by: HV Manh 13/3/2023
     /// </summary>
     public class Department:BaseEntity
     {

@@ -18,6 +18,14 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #endregion
 
         #region Constructor
+        /// <summary>
+        ///  constructor
+        ///   create by: HV Manh 20/3/2023
+        /// </summary>
+        /// <param name="ifrastructureBase">DI infrasturebas</param>
+        /// <param name="employeeRepository">DI employeeRepositoty</param>
+        /// <param name="employeeServices">DI employee Services</param>
+        /// <param name="logger">DI logger</param>
         public EmployeesController(IIfrastructureBase<Employee> ifrastructureBase,
             IEmployeeRepository employeeRepository,
             IEmployeeServices employeeServices,
@@ -34,7 +42,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #region HTTPGET
         /// <summary>
         ///  lấy danh sách nhân viên dựa trên các tham số filter
-        ///  create by: HV Mạnh (20/3/2021)
+        ///  create by: HV Mạnh (20/3/2023)
         /// </summary>
         /// <param name="pageSize">kích thước 1 page</param>
         /// <param name="pageNumber">page hiện tại</param>
@@ -64,7 +72,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
 
         /// <summary>
         ///  lấy mã code mới không trùng để tạo nhân viên mới
-        ///    create by: HV Mạnh (20/3/2021)
+        ///    create by: HV Mạnh (20/3/2023)
         /// </summary>
         /// <returns> httpresult</returns>
         [HttpGet("new-code")]
@@ -91,7 +99,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
 
         /// <summary>
         ///  từ mã code kiểm tra trùng mã
-        ///    create by: HV Mạnh (20/3/2021)
+        ///    create by: HV Mạnh (20/3/2023)
         /// </summary>
         /// <param name="code">mã code nhân viên</param>
         /// <returns> httpresult</returns>
@@ -121,16 +129,16 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #region HTTPPOST
         /// <summary>
         ///  thêm nhân viên
-        ///    create by: HV Mạnh (20/3/2021)
+        ///    create by: HV Mạnh (20/3/2023)
         /// </summary>
-        /// <param name="employees">thông tin nhân viên</param>
+        /// <param name="employee">thông tin nhân viên</param>
         /// <returns> httpresult</returns>
         [HttpPost]
-        public IActionResult InsertNewEmployee([FromBody] Employee employees)
+        public IActionResult InsertNewEmployee([FromBody] Employee employee)
         {
             try
             {
-                var value =  _employeeServices.Insert(employees);
+                var value = _employeeServices.Insert(employee);
                 return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)
@@ -149,7 +157,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
 
         /// <summary>
         /// xóa  nhiều nhân viên
-        ///   create by: HV Mạnh (20/3/2021)
+        ///   create by: HV Mạnh (20/3/2023)
         /// </summary>
         /// <param name="ids">chuỗi danh sách mã nhân viên</param>
         /// <returns> httpresult</returns>
@@ -158,7 +166,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         {
             try
             {
-                var value =  _employeeRepository.DeleteEmployees(ids);
+                var value = _employeeRepository.DeleteEmployees(ids);
                 return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)
@@ -177,21 +185,21 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
 
         /// <summary>
         ///  export file excel
-        /// createBy: HV Mạnh (4/4/2023)
+        /// createBy: HV Mạnh (30/3/2023)
         /// </summary>
         /// <param name="ids">danh sách ids</param>
         /// <param name="key">từ khóa</param>
         /// <param name="type">kiểu export</param>
         /// <returns></returns>
         [HttpPost("export-excel/{type:regex(^(getall|byids)$)}")]
-        public IActionResult ExportExcel([FromBody] string ?ids, [FromQuery] string? key,[FromRoute] string type)
+        public IActionResult ExportExcel([FromBody] string? ids, [FromQuery] string? key, [FromRoute] string type)
         {
             try
             {
-                var stream = _employeeServices.ExportFile(ids,type,key);
+                var stream = _employeeServices.ExportFile(ids, type, key);
                 return File(stream, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", "Employee.xlsx");
             }
-             catch (Exception ex)
+            catch (Exception ex)
             {
                 _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
                 return StatusCode(500, new ResponseResult()
@@ -207,6 +215,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
 
         /// <summary>
         ///  upload file excel
+        ///   create by: HV Manh 6/4/2023
         /// </summary>
         /// <param name="file">file được upload</param>
         /// <returns></returns>
@@ -215,8 +224,8 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         {
             try
             {
-            var result = _employeeServices.ImportFile(file);
-            return StatusCode(result.StatusCode, result);
+                var result = _employeeServices.ImportFile(file);
+                return StatusCode(result.StatusCode, result);
             }
             catch (Exception ex)
             {
@@ -236,16 +245,16 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #region HTTPPUT
         /// <summary>
         ///  sửa nhân viên
-        ///    create by: HV Mạnh(20/3/2021)
+        ///    create by: HV Mạnh(20/3/2023)
         /// </summary>
-        /// <param name = "employees" > thông tin nhân viên</param>
+        /// <param name = "employee" > thông tin nhân viên</param>
         /// <returns> httpresult</returns>
-        [HttpPut]
-        public IActionResult UpdateEmployee([FromBody] Employee employees)
+        [HttpPut("{id}")]
+        public IActionResult UpdateEmployee([FromBody] Employee employee,Guid?id)
         {
             try
             {
-                var value = _employeeServices.Update(employees,employees.EmployeeId);
+                var value = _employeeServices.Update(employee,id);
                 return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)

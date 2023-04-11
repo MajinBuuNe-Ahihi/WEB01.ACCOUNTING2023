@@ -31,7 +31,13 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 
         #region Method
 
-        public ResponseResult DeleteDataByID(Guid id)
+        /// <summary>
+        ///  xóa dữ liệu theo id
+        ///  createby: HVManh (13/3/2023)
+        /// </summary>
+        /// <param name="id">mã của T</param>
+        /// <returns></returns>
+        public ResponseResult DeleteRecordByID(Guid id)
         {
             try
             {
@@ -87,7 +93,13 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
             }
         }
 
-        public ResponseResult GetDataByID(Guid id)
+        /// <summary>
+        ///  lấy dữ liệu theo id
+        ///  createby: HVManh (13/3/2023)
+        /// </summary>
+        /// <param name="id">mã của T</param>
+        /// <returns></returns>
+        public ResponseResult GetRecordByID(Guid id)
         {
             try
             {
@@ -143,7 +155,12 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
             }
         }
 
-        public ResponseResult GetAllData<G>()
+        /// <summary>
+        ///  lấy tất cả bản ghi
+        ///  createby: HVManh (20/3/2023)
+        /// </summary>
+        /// <returns></returns>
+        public ResponseResult GetRecords<G>()
         {
             try
             {

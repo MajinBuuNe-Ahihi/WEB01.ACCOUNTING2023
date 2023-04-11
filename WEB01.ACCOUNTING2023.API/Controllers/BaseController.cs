@@ -26,13 +26,17 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #endregion
 
         #region Methods
-
+        /// <summary>
+        /// thực hiện lấy tất cả bản ghi
+        ///  create by: HV Manh 20/3/2023
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IActionResult GetAll()
         {
             try
             {
-                var value = _ifrastructureBase.GetAllData<T>();
+                var value = _ifrastructureBase.GetRecords<T>();
                 return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)
@@ -51,15 +55,16 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
 
         /// <summary>
         /// lấy thông tin bản ghi dựa vào id
+        /// create by: HV Manh 20/3/2023
         /// </summary>
         /// <param name="id">id của bản ghi</param>
         /// <returns></returns>
         [HttpGet("{id}")]
-        public IActionResult GetDataByID(Guid id)
+        public IActionResult GetRecordByID(Guid id)
         {
             try
             {
-                var value = _ifrastructureBase.GetDataByID(id);
+                var value = _ifrastructureBase.GetRecordByID(id);
                 return StatusCode(value.StatusCode, value);
             }catch (Exception ex)
             {
@@ -77,15 +82,16 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
 
         /// <summary>
         ///  xóa bản ghi dựa trên id
+        ///   create by: HV Manh 20/3/2023
         /// </summary>
         /// <param name="id">id của bản gi</param>
         /// <returns></returns>
         [HttpDelete("{id}")]
-        public IActionResult DeleteDataByID(Guid id)
+        public IActionResult DeleteRecordByID(Guid id)
         {
             try
             {
-                var value = _ifrastructureBase.DeleteDataByID(id);
+                var value = _ifrastructureBase.DeleteRecordByID(id);
                 return StatusCode(value.StatusCode, value);
             }
             catch (Exception ex)

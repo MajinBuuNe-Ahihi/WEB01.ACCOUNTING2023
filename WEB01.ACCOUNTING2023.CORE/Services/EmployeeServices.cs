@@ -10,6 +10,7 @@ using WEB01.ACCOUNTING2023.CORE.Attribute.Validate;
 using WEB01.ACCOUNTING2023.CORE.Entities.DTO;
 using WEB01.ACCOUNTING2023.CORE.Entities.Models;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures;
+using WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures.Files;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Services;
 
 namespace WEB01.ACCOUNTING2023.CORE.Services
@@ -18,13 +19,13 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
     {
         #region Field
         IEmployeeRepository  _employeeRepository;
-        IImportExportServices<EmployeeDTO> _importExportServices;
+        IFileContext _iFileContext;
         #endregion
 
         #region Constructor
-        public EmployeeServices(IEmployeeRepository employeeRepository, IImportExportServices<EmployeeDTO> importExportServices) { 
+        public EmployeeServices(IEmployeeRepository employeeRepository, IFileContext iFileContext) { 
             _employeeRepository = employeeRepository;
-            _importExportServices = importExportServices;
+            _iFileContext = iFileContext;
         }
         #endregion
 
@@ -62,7 +63,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
 
                                     if (id != null)
                                     {
-                                        var result = _employeeRepository.GetDataByID((Guid)id);
+                                        var result = _employeeRepository.GetRecordByID((Guid)id);
                                         if (result.Data != null)
                                         {
                                             var data = (Employee)result.Data;
@@ -93,6 +94,11 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             }
         }
 
+        /// <summary>
+        /// thêm dữ liệu
+        ///  createby: HVManh (13/3/2023)
+        /// </summary>
+        /// <param name="entity">đối tượng nhân viên cần thêm</param>
         public ResponseResult Insert(Employee entity)
         {
             // validate
@@ -107,6 +113,14 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             return new ResponseResult() { Data = null, ErrorCode = CORE.Enum.ErrorCode.INVALID, Message = Resource.Resource.InvalidData.ToString(), StatusCode = 400, MoreInfo = ListErrors };
         }
 
+        /// <summary>
+        /// xuất excel
+        ///   createby: HVManh (31/3/2023)
+        /// </summary>
+        /// <param name="ids">danh sách mã lỗi</param>
+        /// <param name="type">type xuất khẩu</param>
+        /// <param name="keyWord">từ khóa lọc xuất khẩu</param>
+        /// <returns></returns>
         public byte[] ExportFile(string ids, string type = "byids",string keyWord="")
         {
             // kiểm tra type
@@ -114,18 +128,23 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             {   // lấy dữ liệu từ db
                 var result = _employeeRepository.GetEmployeeByIDs(ids);
                 // thực hiện export
-                var value =_importExportServices.ExportFile(result.Data);
+                var value =_iFileContext.ExportFile<EmployeeDTO, EmployeeExcelDTO>(result.Data);
                 return value;
             }
             else
             {
                 var result = _employeeRepository.GetEmployeeByKeyWord<EmployeeDTO>(keyWord);
-                var value = _importExportServices.ExportFile(result.Data);
+                var value = _iFileContext.ExportFile<EmployeeDTO,EmployeeExcelDTO>(result.Data);
                 return value;
             }
 
         }
 
+        /// <summary>
+        /// sửa dữ liệu
+        ///  createby: HVManh (13/3/2023)
+        /// </summary>
+        /// <param name="entity">đối tượng nhân viên cần thêm</param>
         public ResponseResult Update(Employee entity, Guid? id)
         {
             // validate
@@ -140,9 +159,15 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             return new ResponseResult() { Data = null, ErrorCode = CORE.Enum.ErrorCode.INVALID, Message = Resource.Resource.InvalidData.ToString(), StatusCode = 400, MoreInfo = ListErrors };
         }
 
+        /// <summary>
+        ///  nhập excek từ file
+        ///  createby: HVManh (31/3/2023)
+        /// </summary>
+        /// <param name="file">file binary đầu vào</param>
+        /// <returns></returns>
         public ResponseResult ImportFile(IFormFile file)
         {
-            var result =  _importExportServices.ImportFile(file);
+            var result =  _iFileContext.ImportFile(file);
             return result;
         }
 

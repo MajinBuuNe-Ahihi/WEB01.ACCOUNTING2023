@@ -32,9 +32,15 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         #endregion
 
         #region Method
+
+        /// <summary>
+        ///  xóa nhiều
+        /// </summary>
+        /// <param name="ids"> string chứa nhiều id</param>
+        /// <returns></returns>
         public ResponseResult DeleteEmployees(string ids)
         {
-            this._dbConnection.Open();
+            this._dbConnection.GetConnection().Open();
             using (var transaction = this._dbConnection.GetConnection().BeginTransaction())
             {
                 try
@@ -47,7 +53,7 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
                         var numberRecordDelete = ids.Split(",").Length;
                         // khởi tạo kết nối, lấy dữ liệu
                         var proc = "Proc_Employee_Delete";
-                        var results = this._dbConnection.GetConnection().Execute(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
+                        var results = this._dbConnection.GetConnection().Execute(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure,transaction:transaction);
                         // trả về dữ liệu
                         if (results == numberRecordDelete)
                         {
@@ -66,9 +72,9 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
                             return new ResponseResult()
                             {
                                 Data = null,
-                                ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
-                                Message = Resource.NotFound.ToString(),
-                                StatusCode = 404
+                                ErrorCode = CORE.Enum.ErrorCode.FAIL,
+                                Message = Resource.Fail.ToString(),
+                                StatusCode = 400
                             };
                         }
                     }
@@ -90,12 +96,18 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
                     throw ex;
                 }finally
                 {
-                    this._dbConnection.Close();
+                    this._dbConnection.GetConnection().Close();
                 }
             }
            
         }
 
+        /// <summary>
+        ///  lấy dữ liệu số lượng bản ghi dựa vào mã code
+        ///  createby: HVManh (13/3/2023)
+        /// </summary>
+        /// <param name="code">mã code nhân viên</param>
+        /// <returns></returns>
         public ResponseResult GetDataByCode(string code)
         {
             try
@@ -151,6 +163,11 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
             }
         }
 
+        /// <summary>
+        ///  lấy thông tin nhân viên thông qua danh sách id
+        /// </summary>
+        /// <param name="ids">id những nhân viên cần lấy thông tin</param>
+        /// <returns></returns>
         public ResponseResult GetEmployeeByIDs(string ids)
         {
             try
@@ -205,6 +222,12 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
             }
         }
 
+        /// <summary>
+        ///  lấy danh sach nhân viên dựa trên keyword
+        ///  create by: HV Mạnh (9/4/2023)
+        /// </summary>
+        /// <param name="keyWord">từ khóa</param>
+        /// <returns></returns>
         public ResponseResult GetEmployeeByKeyWord<T>(string keyWord="")
         {
             try
@@ -261,6 +284,15 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 
         }
 
+        /// <summary>
+        ///  lấy danh sách đối tượng theo từ khóa và số bản ghi
+        ///  author: HV Mạnh
+        ///  createdate: 13/3/2023
+        /// </summary>
+        /// <param name="pageSize">kích thước 1 trang</param>
+        /// <param name="pageNumber">trang hiện tại</param>
+        /// <param name="key">từ khóa</param>
+        /// <returns></returns>
         public ResponseResult GetFilterData(int pageSize, int pageNumber, string? key)
         {
             try
@@ -311,6 +343,12 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
             }
         }
 
+        /// <summary>
+        ///  lấy danh  mã code mới
+        ///  author: HV Mạnh
+        ///  createdate: 13/3/2023
+        /// </summary>
+        /// <returns>mã code</returns>
         public ResponseResult GetNewCode()
         {
             try
@@ -349,6 +387,12 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
             }
         }
 
+        /// <summary>
+        ///  thêm dữ liệu
+        ///  createby: HVManh (13/3/2023)
+        /// </summary>
+        /// <param name="data">Đố tượng nhân viên</param>
+        /// <returns>số dòng tác động</returns>
         public ResponseResult InsertData(Employee data)
         {
            try
@@ -408,6 +452,14 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
             }
         }
 
+
+        /// <summary>
+        ///  cập nhật data theo id
+        ///  createby: HVManh (13/3/2023)
+        /// </summary>
+        /// <param name="data">đối tượng nhân viên</param>
+        /// <param name="id">mã của nhân viên</param>
+        /// <returns></returns>
         public ResponseResult UpdateData(Employee data, Guid id)
         {
             try

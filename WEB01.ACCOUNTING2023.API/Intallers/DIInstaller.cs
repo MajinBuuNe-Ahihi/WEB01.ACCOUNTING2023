@@ -3,9 +3,11 @@ using WEB01.ACCOUNTING2023.CORE.Configurations;
 using WEB01.ACCOUNTING2023.CORE.Entities.DTO;
 using WEB01.ACCOUNTING2023.CORE.Entities.Models;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures;
+using WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures.Files;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Installers;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Services;
 using WEB01.ACCOUNTING2023.CORE.Services;
+using WEB01.ACCOUNTING2023.INFRASTRUCTURE.Files;
 using WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository;
 
 namespace WEB01.ACCOUNTING2023.API.Intallers
@@ -20,7 +22,7 @@ namespace WEB01.ACCOUNTING2023.API.Intallers
             services.AddScoped<IEmployeeRepository, EmployeeRepository>();
             services.AddScoped<IEmployeeServices, EmployeeServices>();
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
-            services.AddScoped<IImportExportServices<EmployeeDTO>, ExcelServices<EmployeeDTO, EmployeeExcelDTO>>();
+            services.AddScoped<IFileContext,ExcelBuilder>();
         }
     }
 }

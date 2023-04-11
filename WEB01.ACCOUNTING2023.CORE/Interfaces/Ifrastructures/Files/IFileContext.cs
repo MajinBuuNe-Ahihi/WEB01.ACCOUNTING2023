@@ -5,11 +5,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using WEB01.ACCOUNTING2023.CORE.Entities.DTO;
-using WEB01.ACCOUNTING2023.CORE.Entities.Models;
 
-namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Services
+namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures.Files
 {
-   public interface IImportExportServices<T> 
+    public interface IFileContext
     {
         /// <summary>
         /// xuất file theo dữ liệu
@@ -17,7 +16,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Services
         /// </summary>
         /// <param name="data">entity</param>
         /// <returns></returns>
-        public byte[] ExportFile(List<T> data);
+        public byte[] ExportFile<T, G>(List<T> data);
 
         /// <summary>
         /// nhập file dữ liệu

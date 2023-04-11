@@ -7,19 +7,36 @@ using System.Resources;
 
 namespace WEB01.ACCOUNTING2023.CORE.Attribute.Validate
 {
+    /// <summary>
+    /// attribute custom validate length
+    ///  create by: HV Manh 20/3/2023
+    /// </summary>
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = true)]
     public class LengthAttribute:System.Attribute
     {
-            string _info;
-            int _length;
-            string _propertyName;
-            public LengthAttribute(int length,string propertyName)
+        #region Field
+        string _info;
+        int _length;
+        string _propertyName;
+        #endregion
+
+        #region Constructor
+        /// <summary>
+        /// constructor
+        ///  create by: HV Manh 20/3/2023
+        /// </summary>
+        /// <param name="length">độ dài</param>
+        /// <param name="propertyName">tên property</param>
+        public LengthAttribute(int length,string propertyName)
             {
                 _propertyName = propertyName;
                 _length = length;
                 _info = new ResourceManager(typeof(Resource.Resource)).GetString(_propertyName) + " " + Resource.Resource.LengthInvalid;
             }
-            public string Info { get { return _info; } }
-            public int Length { get { return _length; } }
+        #endregion
+        #region Property
+        public string Info { get { return _info; } }
+        public int Length { get { return _length; } }
+        #endregion
     }
 }

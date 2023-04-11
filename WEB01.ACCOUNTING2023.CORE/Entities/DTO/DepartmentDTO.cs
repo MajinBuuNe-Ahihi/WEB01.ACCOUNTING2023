@@ -5,9 +5,10 @@ using System.Text;
 using System.Threading.Tasks;
 
 namespace WEB01.ACCOUNTING2023.CORE.Entities.DTO
-{ 
+{
     /// <summary>
-    ///  đối tượng hiển thị phòng ban
+    ///  đối tượng hiển thị phòng 
+    ///   create by: HV Manh 13/3/2023
     /// </summary>
     public class DepartmentDTO
     {

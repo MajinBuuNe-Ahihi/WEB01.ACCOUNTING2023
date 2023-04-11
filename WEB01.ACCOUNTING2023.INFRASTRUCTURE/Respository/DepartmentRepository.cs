@@ -34,7 +34,13 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
 
         #region Method
 
-        public  ResponseResult GetDataByFilterValue(string value)
+        /// <summary>
+        ///  lấy danh sách phòng ban dự vào giá trị tìm kiếm
+        ///  create by: HV Mạnh (16/3/2023)
+        /// </summary>
+        /// <param name="value">giá trị cần tìm kiếm</param>
+        /// <returns></returns>
+        public ResponseResult GetDataByFilterValue(string value)
         {
             try
             {

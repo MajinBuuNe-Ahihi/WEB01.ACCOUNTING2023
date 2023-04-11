@@ -11,6 +11,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.DTO
 {
     /// <summary>
     ///  đối tượng hiển thị nhân viên
+    ///   create by: HV Manh 13/3/2023
     /// </summary>
     public class EmployeeDTO
     {
