@@ -26,14 +26,18 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Services
         public ResponseResult Update(Employee entity,Nullable<Guid> id);
 
         /// <summary>
-        ///  xuất excel theo danh sách id
+        /// xuất excel
+        ///   createby: HVManh (31/3/2023)
         /// </summary>
-        /// <param name="ids">danh sách mã nhân viên</param>
+        /// <param name="ids">danh sách mã lỗi</param>
+        /// <param name="type">type xuất khẩu</param>
+        /// <param name="keyWord">từ khóa lọc xuất khẩu</param>
         /// <returns></returns>
         public byte[] ExportFile(string ids,string type,string keyWord);
 
         /// <summary>
         ///  nhập excek từ file
+        ///  createby: HVManh (31/3/2023)
         /// </summary>
         /// <param name="file">file binary đầu vào</param>
         /// <returns></returns>

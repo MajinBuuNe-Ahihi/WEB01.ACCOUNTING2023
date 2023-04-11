@@ -29,6 +29,13 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
         #endregion
 
         #region Methods
+        /// <summary>
+        ///  validate override employee
+        ///  create by HV Manh (20/3/2023)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="entity"></param>
+        /// <param name="id"></param>
         public  override void ValidateData<T>(T entity, Guid? id)
         {// thực hiện validate base
            base.ValidateData<T>(entity,id);

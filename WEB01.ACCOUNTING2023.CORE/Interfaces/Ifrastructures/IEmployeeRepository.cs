@@ -72,7 +72,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures
         ///  lấy danh sach nhân viên dựa trên keyword
         ///  create by: HV Mạnh (9/4/2023)
         /// </summary>
-        /// <param name="keyWord"></param>
+        /// <param name="keyWord">từ khóa</param>
         /// <returns></returns>
         public ResponseResult GetEmployeeByKeyWord<T>(string keyWord);
     }

@@ -34,55 +34,64 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
         #region Method
         public ResponseResult DeleteEmployees(string ids)
         {
-            try
+            this._dbConnection.Open();
+            using (var transaction = this._dbConnection.GetConnection().BeginTransaction())
             {
-                // khởi tạo tham số proc
-                DynamicParameters dynamicParameters = new DynamicParameters();
-                dynamicParameters.Add("@v_EmployeeIds", ids);
-                if (dynamicParameters != null)
+                try
                 {
-                    // khởi tạo kết nối, lấy dữ liệu
-                    this._dbConnection.Open();
-                    var proc = "Proc_Employee_Delete";
-                    var results = this._dbConnection.GetConnection().Execute(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
-                    this._dbConnection.Close();
-                    // trả về dữ liệu
-                    if (results != 0)
+                    // khởi tạo tham số proc
+                    DynamicParameters dynamicParameters = new DynamicParameters();
+                    dynamicParameters.Add("@v_EmployeeIds", ids);
+                    if (dynamicParameters != null)
                     {
-                        return new ResponseResult()
+                        var numberRecordDelete = ids.Split(",").Length;
+                        // khởi tạo kết nối, lấy dữ liệu
+                        var proc = "Proc_Employee_Delete";
+                        var results = this._dbConnection.GetConnection().Execute(proc, dynamicParameters, commandType: System.Data.CommandType.StoredProcedure);
+                        // trả về dữ liệu
+                        if (results == numberRecordDelete)
                         {
-                            Data = results,
-                            ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
-                            Message = Resource.Success.ToString(),
-                            StatusCode = 200
-                        };
+                            transaction.Commit();
+                            return new ResponseResult()
+                            {
+                                Data = results,
+                                ErrorCode = CORE.Enum.ErrorCode.SUCCESS,
+                                Message = Resource.Success.ToString(),
+                                StatusCode = 200
+                            };
+                        }
+                        else
+                        {
+                            transaction.Rollback();
+                            return new ResponseResult()
+                            {
+                                Data = null,
+                                ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
+                                Message = Resource.NotFound.ToString(),
+                                StatusCode = 404
+                            };
+                        }
                     }
                     else
-                    {
+                    { 
+                        transaction.Rollback();
                         return new ResponseResult()
                         {
                             Data = null,
-                            ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
-                            Message = Resource.NotFound.ToString(),
-                            StatusCode = 404
+                            ErrorCode = CORE.Enum.ErrorCode.FAIL,
+                            Message = Resource.Fail.ToString(),
+                            StatusCode = 400
                         };
                     }
                 }
-                else
+                catch (Exception ex)
                 {
-                    return new ResponseResult()
-                    {
-                        Data = null,
-                        ErrorCode = CORE.Enum.ErrorCode.FAIL,
-                        Message = Resource.Fail.ToString(),
-                        StatusCode = 400
-                    };
+                    transaction.Rollback();
+                    throw ex;
+                }finally
+                {
+                    this._dbConnection.Close();
                 }
-            }
-            catch (Exception ex)
-            {
-                this._dbConnection.Close();
-                throw ex;
             }
            
         }

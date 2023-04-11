@@ -23,6 +23,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.DTO
             get => _code;
             set
             {
+                // tính tiền tố
                 int prefixNumberZero = (int.Parse(value) < 1000 && int.Parse(value) >= 100) ? 1 : (int.Parse(value) < 100 && int.Parse(value) >= 10) ? 2 : int.Parse(value) > 999?0:3;
                 string prefixStringZero = "";
                 for (int i = 0; i < prefixNumberZero; i++)
