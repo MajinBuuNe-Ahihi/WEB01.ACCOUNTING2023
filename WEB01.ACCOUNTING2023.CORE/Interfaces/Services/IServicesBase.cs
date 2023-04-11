@@ -11,6 +11,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Interfaces.Services
     {
         /// <summary>
         ///  kiểm tra dữ liệu
+        ///  create by: HV Manh (10/3/2023)
         /// </summary>
         /// <param name="data">đầu vào dữ liệu</param>
         /// <returns>validate hợp lê thự hiện luôn thao tác với đb và trả về response</returns>

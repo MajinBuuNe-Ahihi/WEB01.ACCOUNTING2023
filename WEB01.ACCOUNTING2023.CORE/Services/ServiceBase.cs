@@ -33,6 +33,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
             {
                 // lấy thông tin các attribute custom thực hiện thao tác
                 var objects = prop.GetCustomAttributes(true);
+                var valueProp = prop.GetValue(entity, null);
                 if (objects != null)
                 {
                     foreach (System.Attribute obj in objects)
@@ -41,9 +42,17 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         if (obj.GetType() == typeof(RequiredAttribute))
                         {
                             RequiredAttribute requiredAttribute = (RequiredAttribute)obj;
-                            if (prop.GetValue(entity, null) == null || prop.GetValue(entity, null) == "")
+                            if (valueProp == null || valueProp == "")
                             {
                                 ListErrors.Add(prop.Name, requiredAttribute.Info);
+                            }
+                        }
+                        if (obj.GetType() == typeof(LengthAttribute))
+                        {
+                            LengthAttribute lengthAttribute = (LengthAttribute)obj;
+                            if (valueProp != null && valueProp != "" && valueProp.ToString().Length > lengthAttribute.Length )
+                            {
+                                ListErrors.Add(prop.Name, lengthAttribute.Info);
                             }
                         }
                         if (obj.GetType() == typeof(EmailAttribute))
@@ -51,9 +60,9 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                             EmailAttribute emailValidateAttribute = (EmailAttribute)obj;
                             try
                             {
-                                if (prop.GetValue(entity, null) != null)
+                                if (valueProp != null)
                                 {
-                                    var email = new MailAddress(prop.GetValue(entity, null).ToString());
+                                    var email = new MailAddress(valueProp.ToString());
                                 }
                             }
                             catch
@@ -64,9 +73,9 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                         if (obj.GetType() == typeof(OverDateAttribute))
                         {
                             OverDateAttribute overDateAttribute = (OverDateAttribute)obj;
-                            if (prop.GetValue(entity, null) != null)
+                            if (valueProp != null)
                             {
-                                var date = prop.GetValue(entity, null);
+                                var date = valueProp;
                                 var dateCurrent = DateTime.Now;
                                 if (DateTime.Compare((DateTime)date, dateCurrent) == 1)
                                 {

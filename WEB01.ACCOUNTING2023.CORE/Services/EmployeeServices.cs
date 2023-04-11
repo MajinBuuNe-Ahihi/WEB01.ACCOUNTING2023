@@ -65,7 +65,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                                 var value= _employeeRepository.GetDataByCode((string)prop.GetValue(entity, null));
                                                 if ( value.Data != null)
                                                 {
-                                                    ListErrors.Add(prop.Name, onlyAttribute.Info);
+                                                    ListErrors.Add(prop.Name, onlyAttribute.Description + " <" + entityEmployeeCode.ToString()+"> "+onlyAttribute.Info);
                                                 }
                                             }
                                         }
@@ -74,7 +74,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Services
                                     {
                                         var value = _employeeRepository.GetDataByCode((string)prop.GetValue(entity, null));
                                         if(value.Data != null) {
-                                            ListErrors.Add(prop.Name, onlyAttribute.Info);
+                                            ListErrors.Add(prop.Name, onlyAttribute.Description + " <" + (string)prop.GetValue(entity, null) + "> " + onlyAttribute.Info);
                                         }
                                     }
                                      

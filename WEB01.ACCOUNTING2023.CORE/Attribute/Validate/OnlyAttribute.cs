@@ -15,11 +15,13 @@ namespace WEB01.ACCOUNTING2023.CORE.Attribute.Validate
         #region Field
         string _propertyName;
         string _info;
+       string _description;
         
         #endregion
         public OnlyAttribute(string propertyName) { 
             _propertyName = propertyName;
-            _info = new ResourceManager(typeof(Resource.Resource)).GetString(_propertyName)+ " " +  Resource.Resource.OnlyInvalid;
+            _description = new ResourceManager(typeof(Resource.Resource)).GetString(_propertyName);
+            _info =  Resource.Resource.OnlyInvalid;
         }
 
         public string PropertyName { get { return _propertyName; } }
@@ -28,6 +30,11 @@ namespace WEB01.ACCOUNTING2023.CORE.Attribute.Validate
                 return  _info;
             }
         }
+        public string Description { get
+            {
+                return _description;
+            } }
+        
 
     }
 }

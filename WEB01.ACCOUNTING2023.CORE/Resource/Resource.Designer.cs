@@ -151,6 +151,15 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to độ dài không phù hợp!.
+        /// </summary>
+        public static string LengthInvalid {
+            get {
+                return ResourceManager.GetString("LengthInvalid", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Nam.
         /// </summary>
         public static string Male {
@@ -169,7 +178,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Resource {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to đã tồn tại.
+        ///   Looks up a localized string similar to đã tồn tại trong hệ thống vui lòng kiểm tra lại.
         /// </summary>
         public static string OnlyInvalid {
             get {

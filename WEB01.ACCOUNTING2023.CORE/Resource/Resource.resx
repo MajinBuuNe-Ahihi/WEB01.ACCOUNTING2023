@@ -148,6 +148,9 @@
   <data name="InvalidData" xml:space="preserve">
     <value>Dữ liệu không đúng định dạng</value>
   </data>
+  <data name="LengthInvalid" xml:space="preserve">
+    <value>độ dài không phù hợp!</value>
+  </data>
   <data name="Male" xml:space="preserve">
     <value>Nam</value>
   </data>
@@ -155,7 +158,7 @@
     <value>Bản ghi không tồn tại!</value>
   </data>
   <data name="OnlyInvalid" xml:space="preserve">
-    <value>đã tồn tại</value>
+    <value>đã tồn tại trong hệ thống vui lòng kiểm tra lại</value>
     <comment>thông báo kiểu tra property đã trùng</comment>
   </data>
   <data name="Other" xml:space="preserve">

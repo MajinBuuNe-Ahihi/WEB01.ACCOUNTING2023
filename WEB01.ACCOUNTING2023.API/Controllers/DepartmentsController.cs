@@ -25,29 +25,6 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         #endregion
 
         #region Method
-
-        [HttpGet]
-        public IActionResult GetAll()
-        {
-            try
-            {
-                var value = _departmentRepository.GetAllData<Department>();
-                return StatusCode(value.StatusCode, value);
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(HttpContext.TraceIdentifier + " " + ex.Message);
-                return StatusCode(500, new ResponseResult()
-                {
-                    Data = null,
-                    StatusCode = 500,
-                    Message = Resource.ServerError,
-                    DevMessage = ex.Message,
-                    DevCode = HttpContext.TraceIdentifier
-                });
-            }
-        }
-
         /// <summary>
         ///  lọc phòng ban theo key
         ///   create by: HV Mạnh (20/3/2023)

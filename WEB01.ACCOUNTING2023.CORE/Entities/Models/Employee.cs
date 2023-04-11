@@ -18,7 +18,7 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         ///  mã nhân viên
         ///  createby: HVManh (13/3/2023)
         /// </summary>       
-        public Guid EmployeeId { get; set; }
+        public Guid? EmployeeId { get; set; }
 
         /// <summary>
         /// code nhân viên
@@ -26,27 +26,29 @@ namespace WEB01.ACCOUNTING2023.CORE.Entities.Models
         /// </summary>
         [Required("EmployeeCode")]
         [Only("EmployeeCode")]
-        public string EmployeeCode { get; set; }
+        [LengthAttribute(14,"EmployeeCode")]
+        public string? EmployeeCode { get; set; }
 
         /// <summary>
         ///  mã  phòng ban
         ///  createby: HVManh (13/3/2023)
         /// </summary>
         [Required("DepartmentId")]
-        public Guid DepartmentId { get; set; }
+        public Guid? DepartmentId { get; set; }
 
         /// <summary>
         ///  tuổi nhân viên
         ///  createby: HVManh (13/3/2023)
         /// </summary>
-        public Gender Gender { get; set; }
+        public Gender? Gender { get; set; }
 
         /// <summary>
         ///  tên nhân viên
         ///  createby: HVManh (13/3/2023)
         /// </summary>
         [Required("FullName")]
-        public string FullName { get; set; }
+        [LengthAttribute(100,"FullName")]
+        public string? FullName { get; set; }
 
         /// <summary>
         ///  chức danh nhân viên
