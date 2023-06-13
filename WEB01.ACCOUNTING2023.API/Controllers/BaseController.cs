@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using WEB01.ACCOUNTING2023.API.AttributeMiddleware;
 using WEB01.ACCOUNTING2023.CORE.Entities.DTO;
 using WEB01.ACCOUNTING2023.CORE.Entities.Models;
 using WEB01.ACCOUNTING2023.CORE.Interfaces.Ifrastructures;
 using WEB01.ACCOUNTING2023.CORE.Resource;
 using WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository;
+using System.Threading;
 
 namespace WEB01.ACCOUNTING2023.API.Controllers
 {
@@ -60,8 +62,10 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         /// <param name="id">id của bản ghi</param>
         /// <returns></returns>
         [HttpGet("{id}")]
+        [Cache(3000)]
         public IActionResult GetRecordByID(Guid id)
         {
+            Thread.Sleep(5000);
             try
             {
                 var value = _ifrastructureBase.GetRecordByID(id);

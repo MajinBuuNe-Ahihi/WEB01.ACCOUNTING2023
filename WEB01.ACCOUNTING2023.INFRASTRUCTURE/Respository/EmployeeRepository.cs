@@ -431,13 +431,7 @@ namespace WEB01.ACCOUNTING2023.INFRASTRUCTURE.Respository
                     }
                     else
                     {
-                        return new ResponseResult()
-                        {
-                            Data = null,
-                            ErrorCode = CORE.Enum.ErrorCode.NOT_FOUND,
-                            Message = Resource.NotFound.ToString(),
-                            StatusCode = 404
-                        };
+                        return new ResponseResult() { Data = null, ErrorCode = CORE.Enum.ErrorCode.FAIL, Message = Resource.Fail.ToString(), StatusCode = 400 };
                     }
                 }
                 else

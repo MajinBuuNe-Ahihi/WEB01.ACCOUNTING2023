@@ -71,7 +71,7 @@ namespace WEB01.ACCOUNTING2023.API.Controllers
         }
 
         /// <summary>
-        ///  lấy mã code mới không trùng để tạo nhân viên mới
+        ///  lấy mã code mới không trùng để tạo nhân viên mớ
         ///    create by: HV Mạnh (20/3/2023)
         /// </summary>
         /// <returns> httpresult</returns>
